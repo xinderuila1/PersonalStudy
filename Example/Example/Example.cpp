@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "gtest/gtest.h"
-
+#include "UnitTest.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
