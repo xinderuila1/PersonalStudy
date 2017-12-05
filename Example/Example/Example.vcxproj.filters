@@ -19,6 +19,12 @@
     <Filter Include="头文件\Common">
       <UniqueIdentifier>{cf9c52f1-eabb-4eee-9e75-21b4aba4f2f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\BaseData">
+      <UniqueIdentifier>{21fb2a5d-72f3-4b3a-b87d-1c2607523807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\OfferCase">
+      <UniqueIdentifier>{a26f3450-f0af-4a94-8f65-ad331fb7edc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -38,6 +44,12 @@
     </ClInclude>
     <ClInclude Include="UnitTest.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="OfferCase\MirrorBinaryTree.h">
+      <Filter>头文件\OfferCase</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseData\BinaryTree.h">
+      <Filter>头文件\BaseData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
