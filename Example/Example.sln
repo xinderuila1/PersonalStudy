@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProcessA", "ProcessA\Proces
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProcessIPC", "ProcessIPC", "{D7DAA48B-E094-4CA0-9CD8-8916A1BA2433}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProcessCommon", "ProcessCommon\ProcessCommon.vcxproj", "{96855687-BAC2-4A4A-B014-314D1A7F6AF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,6 +29,10 @@ Global
 		{0E59FB63-3788-4B46-8F7F-37750EEB6886}.Debug|Win32.Build.0 = Debug|Win32
 		{0E59FB63-3788-4B46-8F7F-37750EEB6886}.Release|Win32.ActiveCfg = Release|Win32
 		{0E59FB63-3788-4B46-8F7F-37750EEB6886}.Release|Win32.Build.0 = Release|Win32
+		{96855687-BAC2-4A4A-B014-314D1A7F6AF8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{96855687-BAC2-4A4A-B014-314D1A7F6AF8}.Debug|Win32.Build.0 = Debug|Win32
+		{96855687-BAC2-4A4A-B014-314D1A7F6AF8}.Release|Win32.ActiveCfg = Release|Win32
+		{96855687-BAC2-4A4A-B014-314D1A7F6AF8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,5 +40,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0E59FB63-3788-4B46-8F7F-37750EEB6886} = {D7DAA48B-E094-4CA0-9CD8-8916A1BA2433}
 		{C5CAEC58-1754-4E3D-A640-981D1D9412A0} = {D7DAA48B-E094-4CA0-9CD8-8916A1BA2433}
+		{96855687-BAC2-4A4A-B014-314D1A7F6AF8} = {D7DAA48B-E094-4CA0-9CD8-8916A1BA2433}
 	EndGlobalSection
 EndGlobal
