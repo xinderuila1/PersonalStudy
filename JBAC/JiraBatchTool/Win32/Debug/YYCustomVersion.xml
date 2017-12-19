@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+  <product>
+	<version>^1.0.[1-9]\d*.0$</version>
+	<version>^0.10.[1-9]\d*.0$</version>
+  </product>
+  
+  <module>
+	<user name="云业务团队" author="孙建军" domain="sunjj" moduleID ="11123"> </user>
+	<user name="报表团队" author="李杰" domain="lij-m" moduleID ="11124"></user>
+	<user name="升级团队" author="沈晨" domain="shenc" moduleID ="11125"></user>
+	<user name="做法团队" author="苟铭" domain="goum" moduleID ="11122"></user>
+	<user name="钢筋计算" author="张恒" domain="zhangh-aa" moduleID ="11117"></user>
+	<user name="土建计算" author="张恒" domain="zhangh-aa" moduleID ="11118"></user>
+	<user name="CAD团队" author="张曦" domain="zhangx-ai" moduleID ="11119"></user>
+	<user name="建模团队" author="张永楚" domain="zhangyc-c" moduleID ="11126"></user>
+	<user name="未知模块" author="解玲玲" domain="" defalut ="true" moduleID ="-1"></user>
+  </module>
+</root>

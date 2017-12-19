@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+  
+  <module name="云业务团队" author="刘仕杰" domain="">
+    <function name ="云检查" author="张珣">
+      <dll>GTJCloudCheck</dll>
+      <dll>GTJCloudCheckPlugin</dll>
+    </function>
+    
+    <function name ="云指标" author="朱占建">
+      <dll>GTJQuotaPlugin</dll>
+      <dll>GTJQuotaReport</dll>
+    </function>
+
+    <function name ="公共模块" author="刘仕杰">
+      <dll>GTJQuotaPlugin</dll>
+      <dll>GTJQuotaReport</dll>
+    </function>
+  </module>
+
+  <module name="报表团队" author="李杰" domain="">
+    <function name ="报表" author="李杰">
+      <dll>GCLReport</dll>
+      <dll>GGJReport</dll>
+      <dll>GTJReport</dll>
+      <dll>GTJReportPlugin</dll>
+    </function>
+  </module>
+
+  <module name="升级团队" author="沈晨" domain="">
+    <function name ="升级" author="沈晨">
+      <dll>GCLUpgradeService</dll>
+      <dll>GGJUpgrade</dll>
+      <dll>GTJProjectCompare</dll>
+      <dll>GTJUpgradeCommon</dll>
+      <dll>GTJUpgrade</dll>
+    </function>
+  </module>
+
+  <module name="做法团队" author="马宗强" domain="">
+    <function name ="做法" author="苟铭">
+      <dll>GBQIntegration</dll>
+      <dll>GCLWork</dll>
+      <dll>GCLWorkPlugin</dll>
+    </function>
+  </module>
+
+  <module name="计算团队" author="吴昆" domain="">
+    <function name ="土建计算" author="刘晓双">
+      <dll>GCLCalculator</dll>
+      <dll>GCLCollect</dll>
+      <dll>GCLDataService</dll>
+      <dll>GCPPCalculator</dll>
+    </function>
+
+    <function name ="钢筋计算" author="吴昆">
+      <dll>GGJBarCalcRealTime</dll>
+      <dll>GGJBarViewer</dll>
+      <dll>GGJCalcCmd</dll>
+      <dll>GGJCalculator</dll>
+      <dll>GGJCollect</dll>
+    </function>
+
+    <function name ="钢筋通用" author="刘杨">
+      <dll>GGJCalcCommon</dll>
+      <dll>GGJCommon</dll>
+      <dll>GGJDataService</dll>
+      <dll>GGJSectionBarEditor</dll>
+    </function>
+  </module>
+
+  <module name="表格团队" author="秦国海" domain="">
+    <function name ="表格" author="曹海亮">
+      <dll>GGJNMCommon</dll>
+      <dll>GGJTableInput</dll>
+    </function>
+  </module>
+
+  <module name="CAD团队" author="刘斌" domain="">
+    <function name ="CAD" author="刁超旭">
+      <dll>GCADIdentification</dll>
+      <dll>GCADModel</dll>
+      <dll>GTCADImporter</dll>
+      <dll>GTJCADPlugin</dll>
+      <dll>GTTchEntity</dll>
+      <dll>Log</dll>
+    </function>
+  </module>
+
+  <module name="建模团队" author="迟姐" domain="">
+    <function name ="建模平台" author="贾文超">
+      <dll>GCLCmdState</dll>
+      <dll>GCLCommon</dll>
+      <dll>GCLPlugin</dll>
+      <dll>GCLModelEditCmdState</dll>
+      <dll>GCLProjectDataHelper</dll>
+      <dll>GCLRuleDataService</dll>
+      <dll>GCPPMCommon</dll>
+      <dll>GCPPMProjDataHelper</dll>
+      <dll>GGJCmdState</dll>
+      <dll>GGJModel</dll>
+      <dll>GGJModelEditCmdState</dll>
+      <dll>GGJPlugin</dll>
+      <dll>GGJProjectDataHelper</dll>
+      <dll>GTJCalcData</dll>
+      <dll>GTJCmdState</dll>
+      <dll>GTJCommon</dll>
+      <dll>GTJDataService</dll>
+      <dll>GTJModelCommon</dll>
+      <dll>GTJModelEditCmdState</dll>
+      <dll>GTJPlugin</dll>
+      <dll>GTJProjectDataHelper</dll>
+      <dll>GTJUnitTest</dll>
+    </function>
+
+    <function name ="计量平台" author="李钍">
+      <dll>GfcClasses</dll>
+      <dll>GfcImporter</dll>
+      <dll>GMCommon</dll>
+      <dll>GMModel</dll>
+      <dll>GMPCloud</dll>
+      <dll>GMPCloudConfig</dll>
+      <dll>GMPCloudUIPlugin</dll>
+      <dll>GMPCore</dll>
+      <dll>objectbuf</dll>
+      <dll>Ubc</dll>
+    </function>
+  </module>
+
+  <module name="未知模块" author="解玲玲" domain="" defalut ="true">
+  </module>
+</root>
