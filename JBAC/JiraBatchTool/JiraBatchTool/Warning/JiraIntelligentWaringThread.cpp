@@ -33,7 +33,7 @@ void JiraIntelligentWarningThread::run()
 {
     m_pTimer = new QTimer(this);
     connect(m_pTimer, SIGNAL(timeout()), this, SLOT(collectUserInfo()), Qt::QueuedConnection);
-    m_pTimer->start(1000 * 10);
+    m_pTimer->start(1000 * 60 * 5);
     exec();
 }
 

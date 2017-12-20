@@ -11,7 +11,7 @@
 *Copyright (c) 1998-2013 Glodon Corporation
 */
 
-#include "JiraConsts.h"
+#include "Common/JiraConsts.h"
 
 class QXmlStreamReader;
 

@@ -13,7 +13,7 @@
 #include <Python.h>  
 #include <QString>
 
-#include "JiraConsts.h"
+#include "Common/JiraConsts.h"
 struct JiraDllInfo;
 
 class JiraCPlusToPythonOper

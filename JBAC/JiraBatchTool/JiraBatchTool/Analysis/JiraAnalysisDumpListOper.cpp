@@ -1,5 +1,5 @@
 #include "JiraAnalysisDumpListOper.h"
-#include "JiraConsts.h"
+#include "Common/JiraConsts.h"
 
 #include <QDebug>
 #include <QFile>

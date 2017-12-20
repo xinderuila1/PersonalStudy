@@ -1,5 +1,5 @@
-#include "JiraCPlusToPythonOper.h"
-#include "JiraConsts.h"
+#include "Analysis/JiraCPlusToPythonOper.h"
+#include "Common/JiraConsts.h"
 #include <QCoreApplication>
 
 /*!

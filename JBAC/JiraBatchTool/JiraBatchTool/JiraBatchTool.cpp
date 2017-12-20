@@ -1,7 +1,7 @@
 #include "JiraBatchTool.h"
-#include "TestCommon.h"
-#include "JiraBatchCrashInfoOper.h"
-#include "JiraIntelligentWaringThread.h"
+#include "Common/TestCommon.h"
+#include "Analysis/JiraBatchCrashInfoOper.h"
+#include "Warning/JiraIntelligentWaringThread.h"
 
 #include <QLabel>
 #include <QLineEdit>
@@ -23,7 +23,7 @@ static const QString sHintInfo = QStringLiteral("核心功能：自动分析Crash所属团队
 static const QString sDefaultJql = QStringLiteral("project in (GTJTJ) AND issuetype = Crash AND status in (打开的, 进行中) AND 问题归属= NULL");
 
 JiraBatchTool::JiraBatchTool(QWidget *parent)
-    : QMainWindow(parent)
+    : QDialog(parent)
 {
     //ui.setupUi(this);
     initUI();
@@ -39,10 +39,12 @@ JiraBatchTool::~JiraBatchTool()
 
 void JiraBatchTool::initUI()
 {
+    QVBoxLayout* pMainVBox = new QVBoxLayout;
     QWidget *pMainWidget = new QWidget;
     QVBoxLayout *pMainBox = new QVBoxLayout;
     pMainWidget->setLayout(pMainBox);
-    setCentralWidget(pMainWidget);
+    pMainVBox->addWidget(pMainWidget);
+    setLayout(pMainVBox);
 
     QLabel *pLable = new QLabel(QStringLiteral("Jira过滤器："), this);
     m_pJQLInfo = new QLineEdit;

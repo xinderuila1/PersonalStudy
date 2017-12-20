@@ -12,7 +12,7 @@
 */
 #include <map>
 #include <QString>
-#include "JiraConsts.h"
+#include "Common/JiraConsts.h"
 
 class QTime;
 class JiraCPlusToPythonOper;

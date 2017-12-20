@@ -1,7 +1,7 @@
 #include "JiraBatchTool.h"
 #include <QtWidgets/QApplication>
 #include <iostream>
-#include "JiraBatchCrashInfoOper.h"
+#include "Analysis/JiraBatchCrashInfoOper.h"
 
 int main(int argc, char *argv[])
 {

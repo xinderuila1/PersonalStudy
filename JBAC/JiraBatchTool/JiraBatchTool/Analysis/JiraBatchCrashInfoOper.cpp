@@ -1,9 +1,9 @@
-#include "JiraBatchCrashInfoOper.h"
-#include "JiraCPlusToPythonOper.h"
-#include "JiraAnalysisModuleOper.h"
-#include "JiraAnalysisBelongOper.h"
-#include "JiraAnalysisDumpListOper.h"
-#include "JiraAnalysisVersionOper.h"
+#include "Analysis/JiraBatchCrashInfoOper.h"
+#include "Analysis/JiraCPlusToPythonOper.h"
+#include "Analysis/JiraAnalysisModuleOper.h"
+#include "Analysis/JiraAnalysisBelongOper.h"
+#include "Analysis/JiraAnalysisDumpListOper.h"
+#include "Analysis/JiraAnalysisVersionOper.h"
 
 #include <QCoreApplication>
 #include <QFile>

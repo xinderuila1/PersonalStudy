@@ -39,17 +39,17 @@
     <Filter Include="Source Files\Common">
       <UniqueIdentifier>{ee69bb99-4e68-436a-b920-291c16ca96fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Operator">
-      <UniqueIdentifier>{bf3cebbf-bc4c-43ef-bf5f-ecfe102e95ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Operator">
-      <UniqueIdentifier>{cfd273f4-9bbe-40f3-bb3a-fea322155b1a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Warning">
       <UniqueIdentifier>{f0f8e0fe-8626-4ad6-aed0-e2c00c19d436}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Warning">
       <UniqueIdentifier>{b6a50c57-8883-4ad9-927a-eec5633abd04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Analysis">
+      <UniqueIdentifier>{23436e70-4cf2-4831-8162-29d5267b1f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Analysis">
+      <UniqueIdentifier>{8f493b49-9840-4119-8606-8bb50f716874}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -68,28 +68,28 @@
     <ClCompile Include="GeneratedFiles\qrc_JiraBatchTool.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestCommon.cpp">
-      <Filter>Source Files\Common</Filter>
+    <ClCompile Include="Analysis\JiraAnalysisBelongOper.cpp">
+      <Filter>Source Files\Analysis</Filter>
     </ClCompile>
-    <ClCompile Include="JiraAnalysisModuleOper.cpp">
-      <Filter>Source Files\Operator</Filter>
+    <ClCompile Include="Analysis\JiraAnalysisDumpListOper.cpp">
+      <Filter>Source Files\Analysis</Filter>
     </ClCompile>
-    <ClCompile Include="JiraBatchCrashInfoOper.cpp">
-      <Filter>Source Files\Operator</Filter>
+    <ClCompile Include="Analysis\JiraAnalysisModuleOper.cpp">
+      <Filter>Source Files\Analysis</Filter>
     </ClCompile>
-    <ClCompile Include="JiraCPlusToPythonOper.cpp">
-      <Filter>Source Files\Operator</Filter>
+    <ClCompile Include="Analysis\JiraAnalysisVersionOper.cpp">
+      <Filter>Source Files\Analysis</Filter>
     </ClCompile>
-    <ClCompile Include="JiraAnalysisBelongOper.cpp">
-      <Filter>Source Files\Operator</Filter>
+    <ClCompile Include="Analysis\JiraBatchCrashInfoOper.cpp">
+      <Filter>Source Files\Analysis</Filter>
     </ClCompile>
-    <ClCompile Include="JiraAnalysisDumpListOper.cpp">
-      <Filter>Source Files\Operator</Filter>
+    <ClCompile Include="Warning\JiraIntelligentWaringOper.cpp">
+      <Filter>Source Files\Warning</Filter>
     </ClCompile>
-    <ClCompile Include="JiraAnalysisVersionOper.cpp">
-      <Filter>Source Files\Operator</Filter>
+    <ClCompile Include="Warning\JiraIntelligentWaringPython.cpp">
+      <Filter>Source Files\Warning</Filter>
     </ClCompile>
-    <ClCompile Include="JiraIntelligentWaringThread.cpp">
+    <ClCompile Include="Warning\JiraIntelligentWaringThread.cpp">
       <Filter>Source Files\Warning</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_JiraIntelligentWaringThread.cpp">
@@ -98,60 +98,54 @@
     <ClCompile Include="GeneratedFiles\Release\moc_JiraIntelligentWaringThread.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="JiraIntelligentWaringOper.cpp">
-      <Filter>Source Files\Warning</Filter>
+    <ClCompile Include="Common\TestCommon.cpp">
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="JiraIntelligentWaringPython.cpp">
-      <Filter>Source Files\Warning</Filter>
+    <ClCompile Include="Analysis\JiraCPlusToPythonOper.cpp">
+      <Filter>Source Files\Analysis</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="JiraBatchTool.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="JiraBatchTool.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="JiraBatchTool.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="JiraIntelligentWaringThread.h">
+    <CustomBuild Include="Warning\JiraIntelligentWaringThread.h">
       <Filter>Header Files\Warning</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_JiraBatchTool.h">
-      <Filter>Generated Files</Filter>
+    <ClInclude Include="Analysis\JiraAnalysisBelongOper.h">
+      <Filter>Header Files\Analysis</Filter>
     </ClInclude>
-    <ClInclude Include="TestCommon.h">
-      <Filter>Header Files\Common</Filter>
+    <ClInclude Include="Analysis\JiraAnalysisDumpListOper.h">
+      <Filter>Header Files\Analysis</Filter>
     </ClInclude>
-    <ClInclude Include="JiraAnalysisModuleOper.h">
-      <Filter>Header Files\Operator</Filter>
+    <ClInclude Include="Analysis\JiraAnalysisModuleOper.h">
+      <Filter>Header Files\Analysis</Filter>
     </ClInclude>
-    <ClInclude Include="JiraConsts.h">
-      <Filter>Header Files\Common</Filter>
+    <ClInclude Include="Analysis\JiraAnalysisVersionOper.h">
+      <Filter>Header Files\Analysis</Filter>
     </ClInclude>
-    <ClInclude Include="JiraBatchCrashInfoOper.h">
-      <Filter>Header Files\Operator</Filter>
+    <ClInclude Include="Analysis\JiraBatchCrashInfoOper.h">
+      <Filter>Header Files\Analysis</Filter>
     </ClInclude>
-    <ClInclude Include="JiraCPlusToPythonOper.h">
-      <Filter>Header Files\Operator</Filter>
-    </ClInclude>
-    <ClInclude Include="JiraAnalysisBelongOper.h">
-      <Filter>Header Files\Operator</Filter>
-    </ClInclude>
-    <ClInclude Include="JiraAnalysisDumpListOper.h">
-      <Filter>Header Files\Operator</Filter>
-    </ClInclude>
-    <ClInclude Include="JiraAnalysisVersionOper.h">
-      <Filter>Header Files\Operator</Filter>
-    </ClInclude>
-    <ClInclude Include="JiraIntelligentWaringOper.h">
+    <ClInclude Include="Warning\JiraIntelligentWaringOper.h">
       <Filter>Header Files\Warning</Filter>
     </ClInclude>
-    <ClInclude Include="JiraIntelligentWaringPython.h">
+    <ClInclude Include="Warning\JiraIntelligentWaringPython.h">
       <Filter>Header Files\Warning</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\JiraConsts.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\TestCommon.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Analysis\JiraCPlusToPythonOper.h">
+      <Filter>Header Files\Analysis</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -13,7 +13,7 @@
 
 #include <QString>
 #include <QStringList>
-#include "JiraConsts.h"
+#include "Common/JiraConsts.h"
 
 class QXmlStreamReader;
 class JiraAnalysisDumpListOper;
