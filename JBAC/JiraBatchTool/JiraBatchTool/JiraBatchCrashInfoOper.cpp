@@ -1,15 +1,15 @@
-#include "Analysis/JiraBatchCrashInfoOper.h"
-#include "Analysis/JiraAnalysisPythonOper.h"
-#include "Analysis/JiraAnalysisModuleOper.h"
-#include "Analysis/JiraAnalysisBelongOper.h"
-#include "Analysis/JiraAnalysisDumpListOper.h"
-#include "Analysis/JiraAnalysisVersionOper.h"
+#include "JiraBatchCrashInfoOper.h"
+#include "JiraCPlusToPythonOper.h"
+#include "JiraAnalysisModuleOper.h"
+#include "JiraAnalysisBelongOper.h"
+#include "JiraAnalysisDumpListOper.h"
+#include "JiraAnalysisVersionOper.h"
 
 #include <QCoreApplication>
 #include <QFile>
 #include <QDir>
-#include <QDateTime>
 #include <QSettings>
+#include <QDateTime>
 #include <QMessageBox>
 #include <QApplication>
 
@@ -21,12 +21,13 @@ JiraBatchCrashInfoOper::JiraBatchCrashInfoOper()
     :m_pCrashKeyMap(nullptr), m_pCPlusToPythonOper(nullptr), m_pAnalysisModuleOper(nullptr),
     m_pAnalysisLogInfo(nullptr), m_pAnalysisBelongOper(nullptr), m_pAnalysisVersionOper(nullptr)
 {
-    m_pCPlusToPythonOper = new JiraAnalysisPythonOper;
+    m_pCPlusToPythonOper = new JiraCPlusToPythonOper;
     m_pAnalysisDumpListOper = new JiraAnalysisDumpListOper;
     m_pAnalysisModuleOper = new JiraAnalysisModuleOper(m_pAnalysisDumpListOper);
     m_pAnalysisBelongOper = new JiraAnalysisBelongOper(m_pAnalysisDumpListOper);
     m_pAnalysisVersionOper = new JiraAnalysisVersionOper;
     m_pAnalysisLogInfo = new JiraAnalysisLogInfo;
+    m_pTimer = new QTime;
 }
 
 /*!
@@ -35,6 +36,9 @@ JiraBatchCrashInfoOper::JiraBatchCrashInfoOper()
 */
 JiraBatchCrashInfoOper::~JiraBatchCrashInfoOper()
 {
+    delete m_pTimer;
+    m_pTimer = nullptr;
+
     delete m_pAnalysisLogInfo;
     m_pAnalysisLogInfo = nullptr;
 
@@ -59,12 +63,13 @@ JiraBatchCrashInfoOper::~JiraBatchCrashInfoOper()
 *@author       sunjj 2017年2月28日
 *@param[in]    const QString& sSql
 */
-void JiraBatchCrashInfoOper::parseCrashInfo(const QString& sSql)
+void JiraBatchCrashInfoOper::parseCrashInfo(const QString& sSql, bool bShowMsg)
 {
     beforeBatch();
     searchCrashInfo(sSql);
     analysisCrashInfo();
     afterBatch();
+    showMessage(bShowMsg);
 }
 
 /*!
@@ -74,6 +79,8 @@ void JiraBatchCrashInfoOper::parseCrashInfo(const QString& sSql)
 void JiraBatchCrashInfoOper::beforeBatch()
 {
     m_pAnalysisLogInfo->clear();
+    m_sAnalysisTime = "";
+    startTime();
 
     //清空日志信息
     QSettings oSettings(qApp->applicationDirPath() + "/logInfo/analysisCrashLog.ini", QSettings::IniFormat);
@@ -86,6 +93,7 @@ void JiraBatchCrashInfoOper::beforeBatch()
 */
 void JiraBatchCrashInfoOper::afterBatch()
 {
+    endTime();
     outputLogInfo();
     m_pCrashKeyMap->clear();
 }
@@ -107,19 +115,24 @@ void JiraBatchCrashInfoOper::searchCrashInfo(const QString& sSql)
 void JiraBatchCrashInfoOper::analysisCrashInfo()
 {
     CrashUpdateInfo* pUpdateInfo(nullptr);
+    bool bSccuess(false), bSearchIssue(false), bBeforeAnalysis(false), bAnalysisIssue(false), 
+        bUpdateIssue(false), bAfterAnalysis(false), bDownloadStack(false); 
     for (auto pIter = m_pCrashKeyMap->begin(); pIter != m_pCrashKeyMap->end(); ++pIter)
     {
         QString sCrashKey = pIter->first;
-        m_pCPlusToPythonOper->searchIssue(sCrashKey);
-        m_pCPlusToPythonOper->beforeAnalysis();
-        m_pCPlusToPythonOper->analysisIssue();
+        bSearchIssue = m_pCPlusToPythonOper->searchIssue(sCrashKey);
+        bBeforeAnalysis = m_pCPlusToPythonOper->beforeAnalysis();
+        bAnalysisIssue = m_pCPlusToPythonOper->analysisIssue();
         m_pAnalysisDumpListOper->refreshDumpCotainer(sCrashKey);
+        bDownloadStack = m_pCPlusToPythonOper->downloadStack(m_pAnalysisDumpListOper->stackUrlId());
         m_pAnalysisDumpListOper->analysisStack(sCrashKey);
         pUpdateInfo = parseCrashBelong(sCrashKey);
         m_pAnalysisDumpListOper->clearDumpCotainer();
-        m_pCPlusToPythonOper->updateIssue(pUpdateInfo);
-        m_pCPlusToPythonOper->afterAnalysis();
-        //logAnalysisInfo(sCrashKey, bSccuess);
+        bUpdateIssue = m_pCPlusToPythonOper->updateIssue(pUpdateInfo);
+        bAfterAnalysis = m_pCPlusToPythonOper->afterAnalysis();
+        removeCrashFile(sCrashKey);
+        bSccuess = (bSearchIssue && bBeforeAnalysis && bAnalysisIssue && bUpdateIssue && bAfterAnalysis && bDownloadStack)? true : false;
+        logAnalysisInfo(sCrashKey, bSccuess);
     }
 }
 
@@ -159,7 +172,42 @@ CrashUpdateInfo* JiraBatchCrashInfoOper::parseCrashBelong(const QString& sCrashK
     {
         return pFromDllStack;
     }
+
+    //assert(false);
     return pFromScript;
+
+//     CrashUpdateInfo* pUpdateInfo = nullptr;
+//     pUpdateInfo = m_pAnalysisBelongOper->parseModule(sCrashKey);
+// 
+//     if (!pUpdateInfo->sDetailInfo.isEmpty())
+//     {
+//         return pUpdateInfo;
+//     }
+// 
+//     pUpdateInfo = m_pAnalysisModuleOper->parseModule(sCrashKey);
+//     if (!pUpdateInfo->sDomain.isEmpty())
+//     {
+//         return pUpdateInfo;
+//     }
+// 
+//     assert(false);
+//     return pUpdateInfo;
+}
+
+/*!
+*@brief        删除Crash文件 
+*@author       sunjj 2017年3月1日
+*@param[in]    const QString& sCrashKey
+*/
+void JiraBatchCrashInfoOper::removeCrashFile(const QString& sCrashKey)
+{
+    QString sCrashFilePath = qApp->applicationDirPath() +"/crashInfo/" + sCrashKey + "-CrashInfo.txt";
+    if (QFile::exists(sCrashFilePath))
+        QFile::remove(sCrashFilePath);
+
+    QString sCrashJsonPath = qApp->applicationDirPath() +"/crashInfo/" + sCrashKey + ".json";
+    if (QFile::exists(sCrashJsonPath))
+        QFile::remove(sCrashJsonPath);
 }
 
 /*!
@@ -195,6 +243,7 @@ void JiraBatchCrashInfoOper::outputLogInfo()
     oSettings.setValue("sccuessCount", oSccuessed.size());
     oSettings.setValue("failedCount", oFailed.size());
     oSettings.setValue("currentTime", QDateTime::currentDateTime().toString(Qt::ISODate));
+    oSettings.setValue("analysisTime", m_sAnalysisTime);
     oSettings.endGroup();
 
     oSettings.beginGroup("SccuessIssue");
@@ -212,4 +261,33 @@ void JiraBatchCrashInfoOper::outputLogInfo()
         oSettings.setValue(sKey, false);
     }
     oSettings.endGroup();
+}
+
+/*!
+*@brief        开始时间 
+*@author       sunjj 2017年3月2日
+*/
+void JiraBatchCrashInfoOper::startTime()
+{
+    m_pTimer->start();
+}
+
+/*!
+*@brief        结束时间 
+*@author       sunjj 2017年3月2日
+*/
+void JiraBatchCrashInfoOper::endTime()
+{
+    int nTime = m_pTimer->elapsed() / 1000;
+    m_sAnalysisTime = QString::number(nTime) + "s";
+}
+
+/*!
+*@brief        显示信息 
+*@author       sunjj 2017年3月2日
+*@param[in]    bool bShowMsg
+*/
+void JiraBatchCrashInfoOper::showMessage(bool bShowMsg)
+{
+    QMessageBox::information(QApplication::activeWindow(), QStringLiteral("提示"), QStringLiteral("分析完成^_^"));
 }

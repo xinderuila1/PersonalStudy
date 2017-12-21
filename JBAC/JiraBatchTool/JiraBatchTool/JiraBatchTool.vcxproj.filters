@@ -101,7 +101,7 @@
     <ClCompile Include="Common\TestCommon.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Analysis\JiraCPlusToPythonOper.cpp">
+    <ClCompile Include="Analysis\JiraAnalysisPythonOper.cpp">
       <Filter>Source Files\Analysis</Filter>
     </ClCompile>
   </ItemGroup>
@@ -144,7 +144,7 @@
     <ClInclude Include="Common\TestCommon.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Analysis\JiraCPlusToPythonOper.h">
+    <ClInclude Include="analysis\JiraAnalysisPythonOper.h">
       <Filter>Header Files\Analysis</Filter>
     </ClInclude>
   </ItemGroup>

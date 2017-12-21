@@ -16,25 +16,27 @@
 #include "Common/JiraConsts.h"
 struct JiraDllInfo;
 
-class JiraCPlusToPythonOper
+class JiraAnalysisPythonOper
 {
 public:
-    JiraCPlusToPythonOper();
-    ~JiraCPlusToPythonOper();
+    JiraAnalysisPythonOper();
+    ~JiraAnalysisPythonOper();
     
     JiraCrashKeyContainer* searchCrashInfo(const QString& sSqlStr);
+    void LoginPlatform(LoginInfo* pLogInfo);
 
-    bool beforeAnalysis();
-    bool afterAnalysis();
-    bool searchIssue(const QString& sIssue);
-    bool analysisIssue();
-    bool downloadStack(const QString& sIssue);
-    bool updateIssue(CrashUpdateInfo *pDllInfo);
+    void beforeAnalysis();
+    void afterAnalysis();
+    void analysisIssue();
+    void searchIssue(const QString& sIssue);
+    void updateIssue(CrashUpdateInfo *pDllInfo);
     QString productVersion();
 
 private:
     PyObject *m_pModule;
-
+    PyObject *m_pAnalysisClass; 
+    PyObject *m_pAnalysisOper;  
+    PyObject *m_pInitialiseMethod;
     JiraCrashKeyContainer *m_pSearchResult;
 };
 #endif

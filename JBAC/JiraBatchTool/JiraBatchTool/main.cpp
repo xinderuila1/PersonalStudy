@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     if (oArguments.size() >= 2)
     {
         QString sJql = oArguments.at(1);
-        JiraBatchCrashInfoOper().parseCrashInfo(sJql, false);
+        JiraBatchCrashInfoOper().parseCrashInfo(sJql);
         std::cout << "Sccuess ^_^" << std::endl;
         return 1;
     }

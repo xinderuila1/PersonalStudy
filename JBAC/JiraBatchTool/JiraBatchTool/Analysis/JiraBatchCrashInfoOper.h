@@ -14,8 +14,7 @@
 #include <QString>
 #include "Common/JiraConsts.h"
 
-class QTime;
-class JiraCPlusToPythonOper;
+class JiraAnalysisPythonOper;
 class JiraAnalysisModuleOper;
 class JiraAnalysisBelongOper;
 class JiraAnalysisVersionOper;
@@ -27,33 +26,24 @@ public:
     JiraBatchCrashInfoOper();
     ~JiraBatchCrashInfoOper();
 
-    void parseCrashInfo(const QString& sSql, bool bShowMsg = true);
+    void parseCrashInfo(const QString& sSql);
 private:
     void beforeBatch();
     void afterBatch();
 
     void searchCrashInfo(const QString& sSql);
     void analysisCrashInfo();
-    void removeCrashFile(const QString& sCrashKey);
     void logAnalysisInfo(const QString& sCrashKey, bool bSccuess);
     void outputLogInfo();
     CrashUpdateInfo* parseCrashBelong(const QString& sCrashKey);
 
-    void startTime();
-    void endTime();
-
-    void showMessage(bool bShowMsg);
-
 private:
     JiraCrashKeyContainer *m_pCrashKeyMap;
-    JiraCPlusToPythonOper *m_pCPlusToPythonOper;
+    JiraAnalysisPythonOper *m_pCPlusToPythonOper;
     JiraAnalysisModuleOper *m_pAnalysisModuleOper;
     JiraAnalysisBelongOper *m_pAnalysisBelongOper;
     JiraAnalysisVersionOper* m_pAnalysisVersionOper;
     JiraAnalysisDumpListOper *m_pAnalysisDumpListOper;
     JiraAnalysisLogInfo *m_pAnalysisLogInfo;
-
-    QTime *m_pTimer;
-    QString m_sAnalysisTime;
 };
 #endif

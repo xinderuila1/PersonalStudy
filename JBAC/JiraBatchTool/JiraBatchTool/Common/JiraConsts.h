@@ -121,6 +121,14 @@ public:
     }
 };
 
+//GEH/Jira相关信息
+struct LoginInfo
+{
+    QString sJiarUrl;    //Jira登录URL
+    QString sUserName;   //域账号
+    QString sPassword;   //与密码
+};
+
 //dll信息容器
 typedef std::map<QString, JiraDllInfo> JiraDllContainer;
 typedef std::map<QString, QString> JiraCrashKeyContainer;
