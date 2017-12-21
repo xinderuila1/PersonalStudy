@@ -27,9 +27,10 @@ public:
 
     void beforeAnalysis();
     void afterAnalysis();
-    void analysisIssue();
     void searchIssue(const QString& sIssue);
     void updateIssue(CrashUpdateInfo *pDllInfo);
+    QString downloadStack(const QString& sStackId);
+    QString analysisIssue();
     QString productVersion();
 
 private:
@@ -37,6 +38,8 @@ private:
     PyObject *m_pAnalysisClass; 
     PyObject *m_pAnalysisOper;  
     PyObject *m_pInitialiseMethod;
+
+    LoginInfo* m_pLoginInfo;
     JiraCrashKeyContainer *m_pSearchResult;
 };
 #endif

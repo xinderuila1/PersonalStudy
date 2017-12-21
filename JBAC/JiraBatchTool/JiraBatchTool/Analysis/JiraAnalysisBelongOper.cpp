@@ -46,10 +46,9 @@ JiraAnalysisBelongOper::~JiraAnalysisBelongOper()
 /*!
 *@brief        解析归属团队 
 *@author       sunjj 2017年4月17日
-*@param[in]    const QString& sCrashFile
 *@return       CrashUpdateInfo*
 */
-CrashUpdateInfo* JiraAnalysisBelongOper::parseModule(const QString& sCrashFile)
+CrashUpdateInfo* JiraAnalysisBelongOper::parseModule()
 {
     beforeParse();
     parseCrashInfo();

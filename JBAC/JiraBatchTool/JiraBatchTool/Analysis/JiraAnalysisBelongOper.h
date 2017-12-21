@@ -21,7 +21,7 @@ public:
     JiraAnalysisBelongOper(JiraAnalysisDumpListOper* pAnalysisDumpListOper);
     ~JiraAnalysisBelongOper();
 
-    CrashUpdateInfo* parseModule(const QString& sCrashFile);
+    CrashUpdateInfo* parseModule();
 
 private:
     void beforeParse();

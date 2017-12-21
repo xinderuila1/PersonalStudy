@@ -6,7 +6,7 @@
 *@brief        构造函数 
 *@author       sunjj 2017年2月28日
 */
-JiraAnalysisPythonOper::JiraAnalysisPythonOper():m_pSearchResult(nullptr)
+JiraAnalysisPythonOper::JiraAnalysisPythonOper():m_pSearchResult(nullptr), m_pLoginInfo(nullptr)
 {
     Py_Initialize();
 
@@ -14,6 +14,7 @@ JiraAnalysisPythonOper::JiraAnalysisPythonOper():m_pSearchResult(nullptr)
     m_pAnalysisClass = PyObject_GetAttrString(m_pModule, "AnalysisCrashOper");
     m_pAnalysisOper = PyInstance_New(m_pAnalysisClass, NULL, NULL);
     
+    m_pLoginInfo = new LoginInfo;
     m_pSearchResult = new JiraCrashKeyContainer;
 }
 
@@ -30,6 +31,8 @@ JiraAnalysisPythonOper::~JiraAnalysisPythonOper()
     delete m_pSearchResult;
     m_pSearchResult = nullptr;
 
+    delete m_pLoginInfo;
+    m_pLoginInfo = nullptr;
     Py_Finalize();
 }
 
@@ -40,11 +43,11 @@ JiraAnalysisPythonOper::~JiraAnalysisPythonOper()
 */
 void JiraAnalysisPythonOper::LoginPlatform(LoginInfo* pLogInfo)
 {
-    char* pJiraUrl = const_cast<char*>(pLogInfo->sJiarUrl.toStdString().c_str());
-    char* pUserName = const_cast<char*>(pLogInfo->sUserName.toStdString().c_str());
-    char* pPassWord = const_cast<char*>(pLogInfo->sPassword.toStdString().c_str());
-
-    m_pInitialiseMethod = PyObject_CallMethod(m_pAnalysisOper, "initialise", "sss", pJiraUrl, pUserName, pPassWord);
+    m_pLoginInfo->assign(pLogInfo);
+    m_pInitialiseMethod = PyObject_CallMethod(m_pAnalysisOper, "initialise", "sss", 
+        pLogInfo->sJiarUrl.toStdString().c_str(), 
+        pLogInfo->sUserName.toStdString().c_str(), 
+        pLogInfo->sPassword.toStdString().c_str());
 }
 
 /*!
@@ -54,8 +57,7 @@ void JiraAnalysisPythonOper::LoginPlatform(LoginInfo* pLogInfo)
 */
 JiraCrashKeyContainer* JiraAnalysisPythonOper::searchCrashInfo(const QString& sSqlStr)
 {
-    char* pSearchSql = const_cast<char*>(sSqlStr.toStdString().c_str());
-    PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "searchCrashInfo", "s", pSearchSql);
+    PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "searchCrashInfo", "s", sSqlStr.toStdString().c_str());
     PyObject *pKey, *pValue;
     Py_ssize_t pos = 0;
     m_pSearchResult->clear();
@@ -76,19 +78,38 @@ JiraCrashKeyContainer* JiraAnalysisPythonOper::searchCrashInfo(const QString& sS
 */
 void JiraAnalysisPythonOper::searchIssue(const QString& sIssue)
 {
-    char* pIssue = const_cast<char*>(sIssue.toStdString().c_str());
-    PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "searchIssue", "s", pIssue);
+    PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "searchIssue", "s", sIssue.toStdString().c_str());
     Py_DECREF(pReturn);
+}
+
+/*!
+*@brief        下载栈信息 
+*@author       sunjj 2017年12月21日
+*@param[in]    const QString& sStackId
+*@return       QString
+*/
+QString JiraAnalysisPythonOper::downloadStack(const QString& sStackId)
+{
+    char* pResult;
+    PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "crashStack", "s", sStackId.toStdString().c_str());
+    PyArg_Parse(pReturn, "s", &pResult);
+    QString sResult(pResult);
+    Py_DECREF(pReturn);
+    return sResult;
 }
 
 /*!
 *@brief        分析Issue
 *@author       sunjj 2017年3月1日
 */
-void JiraAnalysisPythonOper::analysisIssue()
+QString JiraAnalysisPythonOper::analysisIssue()
 {
-    PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "analysisIssue", nullptr);
+    char* pResult;
+    PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "analysisIssue", nullptr, nullptr);
+    PyArg_Parse(pReturn, "s", &pResult);
+    QString sResult(pResult);
     Py_DECREF(pReturn);
+    return sResult;
 }
 
 /*!
@@ -120,8 +141,9 @@ void JiraAnalysisPythonOper::updateIssue(CrashUpdateInfo *pUpdateInfo)
 */
 void JiraAnalysisPythonOper::beforeAnalysis()
 {
-    char* pExepath = const_cast<char*>(qApp->applicationDirPath().toStdString().c_str());
-    PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "beforeAnalysis", "s", pExepath);
+    PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "beforeAnalysis", "ss", 
+        qApp->applicationDirPath().toStdString().c_str(), 
+        m_pLoginInfo->sProductCode.toStdString().c_str());
     Py_DECREF(pReturn);
 }
 

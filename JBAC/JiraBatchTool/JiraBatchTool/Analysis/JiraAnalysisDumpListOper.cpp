@@ -3,61 +3,46 @@
 
 #include <QDebug>
 #include <QFile>
-#include <QTextStream>
-#include <QCoreApplication>
 
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+
+#define HIGH_FREQUENCY_COUNT  2
 
 /*!
 *@brief        分析栈信息 
 *@author       sunjj 2017年7月20日
 *@param[in]    const QString& sIssue
 */
-void JiraAnalysisDumpListOper::analysisStack(const QString& sIssue)
+void JiraAnalysisDumpListOper::analysisStack(const QString& sDumpJson)
 {
-    QString sCrashStackInfo;
-    QFile oCrashFile(qApp->applicationDirPath() +"/crashInfo/" + sIssue + "-CrashInfo.txt");
-    if (oCrashFile.open(QFile::ReadWrite | QIODevice::Text))
-    {
-        QString sCrashInfo = oCrashFile.readAll();
-        QJsonDocument oJsonDocument = QJsonDocument::fromJson(sCrashInfo.toUtf8());
-        QString sReportStr = oJsonDocument.object().value("report").toString().replace("\\", "");
-        oJsonDocument = QJsonDocument::fromJson(sReportStr.toUtf8());
+    m_sCrashStackInfo.clear();
+    QJsonDocument oJsonDocument = QJsonDocument::fromJson(sDumpJson.toUtf8());
+    QString sReportStr = oJsonDocument.object().value(strReport).toString().replace("\\", "");
+    oJsonDocument = QJsonDocument::fromJson(sReportStr.toUtf8());
         
-        QJsonObject oCrashJsonObject = oJsonDocument.object().value("crash").toObject();
-        QJsonObject oThreadJsonObject = oJsonDocument.object().value("threads").toObject();
+    QJsonObject oCrashJsonObject = oJsonDocument.object().value(strCrash).toObject();
+    QJsonObject oThreadJsonObject = oJsonDocument.object().value(strThreads).toObject();
 
-        //Crash信息摘要
-        QString sCrashAddress = oCrashJsonObject.value(strCrashAddress).toString();
-        QString sCrashReson = oCrashJsonObject.value(strCrashReason).toString();
-        QString sCrashThreadIndex = QString::number(oCrashJsonObject.value(strCrashThreadIndex).toVariant().toInt());
-        sCrashStackInfo += "crash_address:" + sCrashAddress + "\n";
-        sCrashStackInfo += "crash_reason:" + sCrashReson + "\n\n\n";
+    //Crash信息摘要
+    QString sCrashAddress = oCrashJsonObject.value(strCrashAddress).toString();
+    QString sCrashReson = oCrashJsonObject.value(strCrashReason).toString();
+    QString sCrashThreadIndex = QString::number(oCrashJsonObject.value(strCrashThreadIndex).toVariant().toInt());
+    m_sCrashStackInfo += "crash_address:" + sCrashAddress + "\n";
+    m_sCrashStackInfo += "crash_reason:" + sCrashReson + "\n\n\n";
 
-        //Crash堆栈信息
-        QJsonArray oJsonArray = oThreadJsonObject.value(sCrashThreadIndex).toArray();
-        for (int nIndex = 0; nIndex < oJsonArray.size(); ++nIndex)
-        {
-            QJsonObject oJsonObject = oJsonArray.at(nIndex).toObject();
-            QString sFrame = QString::number(oJsonObject.value(strFrameIndex).toVariant().toUInt());
-            QString sModule = oJsonObject.value(strModule).toString();
-            QString sSourceFile = oJsonObject.value(strSourceFile).toString();
-            QString sSourceLine = oJsonObject.value(strSourceLine).toString();
-            QString sFunction = oJsonObject.value(strFunction).toString();
-            sCrashStackInfo += sFrame + "  " + sModule + "    " + sSourceFile + "  " + sSourceLine + "  " + sFunction + "\n";
-        }
-    }
-    
-    if (!sCrashStackInfo.isEmpty())
+    //Crash堆栈信息
+    QJsonArray oJsonArray = oThreadJsonObject.value(sCrashThreadIndex).toArray();
+    for (int nIndex = 0; nIndex < oJsonArray.size(); ++nIndex)
     {
-        oCrashFile.close();
-        oCrashFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-        QTextStream oTextStream(&oCrashFile);
-        oTextStream << sCrashStackInfo;
-        oTextStream.flush();
-        oCrashFile.close();
+        QJsonObject oJsonObject = oJsonArray.at(nIndex).toObject();
+        QString sFrame = QString::number(oJsonObject.value(strFrameIndex).toVariant().toUInt());
+        QString sModule = oJsonObject.value(strModule).toString();
+        QString sSourceFile = oJsonObject.value(strSourceFile).toString();
+        QString sSourceLine = oJsonObject.value(strSourceLine).toString();
+        QString sFunction = oJsonObject.value(strFunction).toString();
+        m_sCrashStackInfo += sFrame + "  " + sModule + "    " + sSourceFile + "  " + sSourceLine + "  " + sFunction + "\n";
     }
 }
 
@@ -87,33 +72,29 @@ JiraAnalysisDumpListOper::~JiraAnalysisDumpListOper()
 */
 void JiraAnalysisDumpListOper::clearDumpCotainer()
 {
+    m_sCrashStackInfo.clear();
     m_pScriptContainer->swap(AutoScriptContainer());
 }
 
 /*!
 *@brief        刷新Dump列表容器 
 *@author       sunjj 2017年7月20日
-*@param[in]    const QString& sIssue
+*@param[in]    const QString& sDumpJson
 */
-void JiraAnalysisDumpListOper::refreshDumpCotainer(const QString& sIssue)
+void JiraAnalysisDumpListOper::refreshDumpCotainer(const QString& sDumpJson)
 {
-    QFile oCrashFile(qApp->applicationDirPath() +"/crashInfo/" + sIssue + ".json");
-    if (oCrashFile.open(QFile::ReadOnly | QIODevice::Text))
+    QJsonDocument oJsonDocument = QJsonDocument::fromJson(sDumpJson.toUtf8());
+    QJsonArray oJsonArray = oJsonDocument.object().value(strList).toArray();
+    for (int nIndex = 0; nIndex < oJsonArray.size(); ++nIndex)
     {
-        QString sCrashInfo = oCrashFile.readAll();
-        QJsonDocument oJsonDocument = QJsonDocument::fromJson(sCrashInfo.toUtf8());
-        QJsonArray oJsonArray = oJsonDocument.object().value("list").toArray();
-        for (int nIndex = 0; nIndex < oJsonArray.size(); ++nIndex)
-        {
-            AutoScriptInfo oScriptInfo;
-            QJsonObject oJsonObject = oJsonArray.at(nIndex).toObject();
-            oScriptInfo.bIsAutoScript = oJsonObject.value(strAutotest).toString().trimmed() == "autotest";
-            oScriptInfo.sSubmitter = oJsonObject.value(strSubmitter).toString();
-            oScriptInfo.sDetailInfo = oJsonObject.value(strDescription).toString();
-            oScriptInfo.sDumpUrl = oJsonObject.value(strDumpId).toString();
-            oScriptInfo.sStackId = QString::number(oJsonObject.value(strStackId).toVariant().toULongLong());
-            m_pScriptContainer->push_back(oScriptInfo);
-        }
+        AutoScriptInfo oScriptInfo;
+        QJsonObject oJsonObject = oJsonArray.at(nIndex).toObject();
+        oScriptInfo.bIsAutoScript = oJsonObject.value(strAutotest).toString().trimmed() == strAutoTestTag;
+        oScriptInfo.sSubmitter = oJsonObject.value(strSubmitter).toString();
+        oScriptInfo.sDetailInfo = oJsonObject.value(strDescription).toString();
+        oScriptInfo.sDumpUrl = oJsonObject.value(strDumpId).toString();
+        oScriptInfo.sStackId = QString::number(oJsonObject.value(strStackId).toVariant().toULongLong());
+        m_pScriptContainer->push_back(oScriptInfo);
     }
 }
 
@@ -169,9 +150,9 @@ QString JiraAnalysisDumpListOper::remarks()
     {
         AutoScriptInfo oScriptInfo = *pIter;
         QJsonObject oJsonObject;
-        oJsonObject.insert("IsAutoTest", oScriptInfo.bIsAutoScript);
-        oJsonObject.insert("Submitter", oScriptInfo.sSubmitter);
-        oJsonObject.insert("DetailInfo", oScriptInfo.sDetailInfo);
+        oJsonObject.insert(strIsAutoTest, oScriptInfo.bIsAutoScript);
+        oJsonObject.insert(strSubmitters, oScriptInfo.sSubmitter);
+        oJsonObject.insert(strDetailInfo, oScriptInfo.sDetailInfo);
         oJsonArray.append(oJsonObject);
     }
     QJsonDocument oJsonDocument;
@@ -186,5 +167,15 @@ QString JiraAnalysisDumpListOper::remarks()
 */
 QString JiraAnalysisDumpListOper::highFrequency()
 {
-    return (m_pScriptContainer->size() >= 2)? "true" : "";
+    return (m_pScriptContainer->size() >= HIGH_FREQUENCY_COUNT)? "true" : "";
+}
+
+/*!
+*@brief        堆栈信息 
+*@author       sunjj 2017年12月21日
+*@return       QString
+*/
+QString JiraAnalysisDumpListOper::stackInfo()
+{
+    return m_sCrashStackInfo;
 }

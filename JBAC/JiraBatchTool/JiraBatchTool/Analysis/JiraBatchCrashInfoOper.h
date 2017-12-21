@@ -33,9 +33,7 @@ private:
 
     void searchCrashInfo(const QString& sSql);
     void analysisCrashInfo();
-    void logAnalysisInfo(const QString& sCrashKey, bool bSccuess);
-    void outputLogInfo();
-    CrashUpdateInfo* parseCrashBelong(const QString& sCrashKey);
+    CrashUpdateInfo* parseCrashBelong();
 
 private:
     JiraCrashKeyContainer *m_pCrashKeyMap;
@@ -44,6 +42,5 @@ private:
     JiraAnalysisBelongOper *m_pAnalysisBelongOper;
     JiraAnalysisVersionOper* m_pAnalysisVersionOper;
     JiraAnalysisDumpListOper *m_pAnalysisDumpListOper;
-    JiraAnalysisLogInfo *m_pAnalysisLogInfo;
 };
 #endif

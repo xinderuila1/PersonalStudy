@@ -24,14 +24,14 @@ public:
     JiraAnalysisModuleOper(JiraAnalysisDumpListOper* pAnalysisDumpListOper);
     ~JiraAnalysisModuleOper();
 
-    CrashUpdateInfo* parseModule(const QString& sCrashFile);
+    CrashUpdateInfo* parseModule();
 
 private:
     void beforeParse();
     void afterParse();
 
     void parseCrashInfo();
-    void loadCrashInfo(const QString& sCrashFile);
+    void loadCrashInfo();
 
     void loadDllInfo();
     void loadModuleInfo();

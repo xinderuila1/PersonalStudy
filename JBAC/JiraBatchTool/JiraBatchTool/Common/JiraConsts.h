@@ -124,9 +124,18 @@ public:
 //GEH/Jira相关信息
 struct LoginInfo
 {
-    QString sJiarUrl;    //Jira登录URL
-    QString sUserName;   //域账号
-    QString sPassword;   //与密码
+    QString sJiarUrl;     //Jira登录URL
+    QString sUserName;    //域账号
+    QString sPassword;    //与密码
+    QString sProductCode; //产品标识
+public:
+    void assign(LoginInfo* pLoginInfo)
+    {
+        sJiarUrl = pLoginInfo->sJiarUrl;
+        sUserName = pLoginInfo->sUserName;
+        sPassword = pLoginInfo->sPassword;
+        sProductCode = pLoginInfo->sProductCode;
+    }
 };
 
 //dll信息容器
@@ -161,6 +170,14 @@ static const QString strCrashReason = "crash_reason";
 static const QString strCrashThreadIndex = "crash_thread_index";
 static const QString strProduct = "product";
 static const QString strUser = "user";
+static const QString strAutoTestTag = "autotest";
+static const QString strReport = "report";
+static const QString strCrash = "crash";
+static const QString strThreads = "threads";
+static const QString strList = "list";
+static const QString strIsAutoTest = "IsAutoTest";
+static const QString strSubmitters = "Submitter";
+static const QString strDetailInfo = "DetailInfo";
 
 // Jira 归属团队ID字段标识类
 // 钢筋计算： 18930 a

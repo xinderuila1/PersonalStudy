@@ -47,13 +47,12 @@ JiraAnalysisModuleOper::~JiraAnalysisModuleOper()
 /*!
 *@brief        解析crash信息 
 *@author       sunjj 2017年2月23日
-*@param[in]    const QString& sCrashFile
 *@return       CrashUpdateInfo*
 */
-CrashUpdateInfo* JiraAnalysisModuleOper::parseModule(const QString& sCrashFile)
+CrashUpdateInfo* JiraAnalysisModuleOper::parseModule()
 {
     beforeParse();
-    loadCrashInfo(sCrashFile);
+    loadCrashInfo();
     parseCrashInfo();
     afterParse();
 
@@ -124,40 +123,16 @@ void JiraAnalysisModuleOper::parseCrashInfo()
 /*!
 *@brief        加载Crash信息 
 *@author       sunjj 2017年2月23日
-*@param[in]    const QString& sCrashFile
 */
-void JiraAnalysisModuleOper::loadCrashInfo(const QString& sCrashFile)
+void JiraAnalysisModuleOper::loadCrashInfo()
 {
-    QFile oCrashTxtFile(qApp->applicationDirPath() +"/crashInfo/" + sCrashFile + "-CrashInfo.txt");
-    if (oCrashTxtFile.open(QFile::ReadOnly | QIODevice::Text))
+    QString sCrashStackStr = m_pAnalysisDumpListOper->stackInfo();
+    QTextStream oTextStream(&sCrashStackStr);
+    oTextStream.setCodec("UTF-8");
+    while (!oTextStream.atEnd())
     {
-//         bool bTestCrash(false);  
-//         bool bTestThead(false); 
-
-        QTextStream oTextStream(&oCrashTxtFile);
-        oTextStream.setCodec("UTF-8");
-        while (!oTextStream.atEnd())
-        {
-            QString sLineInfo = oTextStream.readLine().remove('\n').trimmed();
-            m_pCrashInfoList->append(sLineInfo);
-//             if (!bTestCrash && sLineInfo.contains("(crashed)"))
-//             {
-//                 bTestCrash = true;
-//                 m_pCrashInfoList->append(sLineInfo);
-//                 continue;
-//             }
-//                 
-//             if (bTestCrash && (sLineInfo.startsWith("Thread") || sLineInfo.startsWith("Loaded modules:")))
-//             {
-//                 bTestThead = bTestCrash;
-//                 break;
-//             }
-// 
-//             if (bTestCrash)
-//             {
-//                 m_pCrashInfoList->append(sLineInfo);
-//             }
-        }
+        QString sLineInfo = oTextStream.readLine().remove('\n').trimmed();
+        m_pCrashInfoList->append(sLineInfo);
     }
 }
 

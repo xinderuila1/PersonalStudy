@@ -19,18 +19,20 @@ public:
     JiraAnalysisDumpListOper();
     ~JiraAnalysisDumpListOper();
 
-    void analysisStack(const QString& sIssue);
+    void analysisStack(const QString& sDumpJson);
     
     QString stackUrlId();
     QString dumpUrl();
     QString remarks();
     QString highFrequency();
+    QString stackInfo();
 
     void clearDumpCotainer();
-    void refreshDumpCotainer(const QString& sIssue);
+    void refreshDumpCotainer(const QString& sDumpJson);
     AutoScriptContainer *dumpContainer();
 
 private:
+    QString m_sCrashStackInfo;
     AutoScriptContainer* m_pScriptContainer;
 };
 #endif
