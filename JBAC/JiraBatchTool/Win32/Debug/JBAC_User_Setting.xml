@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+	<!--Crash划分原则-->
+	<CrashBelongRule>
+	    <!--根据脚本名称划分-->
+		<ByAutoScript>
+			<module identification = "Cloud" name="云业务团队" author="刘仕杰" domain="liusj-a" moduleID ="11123"/>
+			<module identification = "Report" name="报表团队" author="李杰" domain="lij-m" moduleID ="11124"/>
+			<module identification = "Upgrade" name="升级团队" author="沈晨" domain="shenc" moduleID ="11125"/>
+			<module identification = "GCLWork" name="做法团队" author="苟铭" domain="goum" moduleID ="11122"/>
+			<module identification = "GGJ" name="钢筋计算" author="刘建明" domain="liujm" moduleID ="11117"/>
+			<module identification = "GCL" name="土建计算" author="刘健健" domain="liujj-a" moduleID ="11118"/>
+			<module identification = "CAD" name="CAD团队" author="刘斌" domain="liub-b" moduleID ="11119"/>
+			<module identification = "Model" name="建模团队" author="代叶" domain="daiy" moduleID ="11126"/>
+			<module name="未知模块" author="解玲玲" domain="" defalut ="true" moduleID ="-1">
+		</ByAutoScript>
+		
+		<!-- 根据堆栈信息划分 -->
+		<ByStackDll>
+			<module name="云业务团队" author="刘仕杰" domain="liusj-a" moduleID ="11123">
+			<function name ="云检查" author="张珣" priority = "10">
+			  <dll>GTJCloudCheck</dll>
+			  <dll>GTJCloudCheckPlugin</dll>
+			</function>
+
+			<function name ="云指标" author="朱占建" priority = "10">
+			  <dll>GTJQuotaPlugin</dll>
+			  <dll>GTJQuotaReport</dll>
+			</function>
+
+			<function name ="公共模块" author="刘仕杰" priority = "10">
+			  <dll>GTJProCommon</dll>
+			  <dll>GTJProPlugin</dll>
+			</function>
+			</module>
+
+			<module name="报表团队" author="李杰" domain="lij-m" moduleID ="11124">
+			<function name ="报表" author="李杰" priority = "5">
+			  <dll>GCLReport</dll>
+			  <dll>GGJReport</dll>
+			  <dll>GTJReport</dll>
+			  <dll>GTJReportPlugin</dll>
+			</function>
+			</module>
+
+			<module name="升级团队" author="沈晨" domain="shenc" moduleID ="11125">
+			<function name ="升级" author="沈晨" priority = "5">
+			  <dll>GCLUpgradeService</dll>
+			  <dll>GGJUpgrade</dll>
+			  <dll>GTJProjectCompare</dll>
+			  <dll>GTJUpgradeCommon</dll>
+			  <dll>GTJUpgrade</dll>
+			</function>
+			</module>
+
+			<module name="做法团队" author="马宗强" domain="mazq-a" moduleID ="11122">
+			<function name ="做法" author="苟铭" priority = "5">
+			  <dll>GBQIntegration</dll>
+			  <dll>GCLWork</dll>
+			  <dll>GCLWorkPlugin</dll>
+			</function>
+			</module>
+
+			<module name="钢筋计算" author="刘建明" domain="liujm" moduleID ="11117">
+			<function name ="钢筋计算" author="吴昆" priority = "5">
+			  <dll>GGJBarCalcRealTime</dll>
+			  <dll>GGJBarViewer</dll>
+			  <dll>GGJCalcCmd</dll>
+			  <dll>GGJCalculator</dll>
+			  <dll>GGJCollect</dll>
+			  <dll>GGJMerge</dll>
+			</function>
+
+			<function name ="钢筋通用" author="刘杨" priority = "5">
+			  <dll>GGJCalcCommon</dll>
+			  <dll>GGJCommon</dll>
+			  <dll>GGJDataService</dll>
+			  <dll>GGJSectionBarEditor</dll>
+			  <dll>GGJBusinessOper</dll>
+			</function>
+
+			<function name ="表格" author="曹海亮" priority = "5">
+			  <dll>GGJNMCommon</dll>
+			  <dll>GGJTableInput</dll>
+			</function>
+			</module>
+
+			<module name="土建计算" author="刘健健" domain="liujj-a" moduleID ="11118">
+			<function name ="土建计算" author="刘健健" priority = "5">
+			  <dll>GCLCalculator</dll>
+			  <dll>GCLCollect</dll>
+			  <dll>GCLDataService</dll>
+			  <dll>GCPPCalculator</dll>
+			  <dll>GCLMerge</dll>
+			  <dll>GTJCalcExe</dll>
+			  <dll>GTJCalcQuantityFrm</dll>
+			  <dll>GTJCalcServer</dll>
+			  <dll>GTJCalcUtils</dll>
+			  <dll>GCClient</dll>
+			  <dll>GCloudUtils</dll>
+			  <dll>GCW</dll>
+			  <dll>GCWStarter</dll>
+			  <dll>GDD</dll>
+			  <dll>GDS</dll>
+			</function>
+			</module>
+
+			<module name="CAD团队" author="刘斌" domain="liub-b" moduleID ="11119">
+			<function name ="CAD" author="刁超旭" priority = "5">
+			  <dll>GCADIdentification</dll>
+			  <dll>GCADModel</dll>
+			  <dll>GTCADImporter</dll>
+			  <dll>GTJCADPlugin</dll>
+			  <dll>GTTchEntity</dll>
+			  <dll>Log</dll>
+			</function>
+			</module>
+
+			<module name="建模团队" author="代叶" domain="daiy" moduleID ="11126">
+			<function name ="建模平台" author="贾文超" priority = "3">
+			  <dll>GCLCmdState</dll>
+			  <dll>GCLCommon</dll>
+			  <dll>GCLPlugin</dll>
+			  <dll>GCLModelEditCmdState</dll>
+			  <dll>GCLProjectDataHelper</dll>
+			  <dll>GCLRuleDataService</dll>
+			  <dll>GCPPMCommon</dll>
+			  <dll>GCPPMProjDataHelper</dll>
+			  <dll>GGJCmdState</dll>
+			  <dll>GGJModel</dll>
+			  <dll>GGJModelEditCmdState</dll>
+			  <dll>GGJPlugin</dll>
+			  <dll>GGJProjectDataHelper</dll>
+			  <dll>GTJCalcData</dll>
+			  <dll>GTJCmdState</dll>
+			  <dll>GTJCommon</dll>
+			  <dll>GTJDataService</dll>
+			  <dll>GTJModelCommon</dll>
+			  <dll>GTJModelEditCmdState</dll>
+			  <dll>GTJPlugin</dll>
+			  <dll>GTJProjectDataHelper</dll>
+			  <dll>GTJUnitTest</dll>
+			</function>
+
+			<function name ="计量平台" author="李钍" priority = "0">
+			  <dll>GfcClasses</dll>
+			  <dll>GfcImporter</dll>
+			  <dll>GMCommon</dll>
+			  <dll>GMModel</dll>
+			  <dll>GMPCloud</dll>
+			  <dll>GMPCloudConfig</dll>
+			  <dll>GMPCloudUIPlugin</dll>
+			  <dll>GMPCore</dll>
+			  <dll>objectbuf</dll>
+			  <dll>Ubc</dll>
+			</function>
+			</module>
+
+			<module name="图形平台" author="黄晓剑" domain="huangxj" moduleID ="11121">
+			<function name ="图形平台" author="黄晓剑" priority = "-5">
+			  <dll>ArchiAlgo</dll>
+			  <dll>Geometry</dll>
+			  <dll>GMath</dll>
+			  <dll>GP</dll>
+			</function>
+			</module>
+
+			<module name="未知模块" author="解玲玲" domain="" defalut ="true" moduleID ="-1">
+			</module>
+		</ByStackDll>
+	</CrashBelongRule>
+</root>
