@@ -108,6 +108,8 @@ struct CrashUpdateInfo
     QString sRemarks;       //Crash备注信息
     QString sDumpUrl;       //Crash对应dump地址
     QString sHighFrequency; //Crash高频次(崩溃次数>=2)
+    QString sStackInfo;     //堆栈信息
+    QString sCrashCount;    //崩溃次数
 public:
     void clear()
     {

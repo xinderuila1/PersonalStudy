@@ -26,6 +26,7 @@ public:
     QString remarks();
     QString highFrequency();
     QString stackInfo();
+    QString crashCount();
 
     void clearDumpCotainer();
     void refreshDumpCotainer(const QString& sDumpJson);

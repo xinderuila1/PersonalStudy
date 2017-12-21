@@ -107,6 +107,8 @@ void JiraAnalysisBelongOper::parseCrashInfo()
     m_pCrashUpdateInfo->sDumpUrl = m_pAnalysisDumpListOper->dumpUrl();
     m_pCrashUpdateInfo->sRemarks = m_pAnalysisDumpListOper->remarks();
     m_pCrashUpdateInfo->sHighFrequency = m_pAnalysisDumpListOper->highFrequency();
+    m_pCrashUpdateInfo->sStackInfo = m_pAnalysisDumpListOper->stackInfo();
+    m_pCrashUpdateInfo->sCrashCount = m_pAnalysisDumpListOper->crashCount();
 }
 
 /*!

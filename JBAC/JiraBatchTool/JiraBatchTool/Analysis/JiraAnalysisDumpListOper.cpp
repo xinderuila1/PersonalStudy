@@ -29,8 +29,8 @@ void JiraAnalysisDumpListOper::analysisStack(const QString& sDumpJson)
     QString sCrashAddress = oCrashJsonObject.value(strCrashAddress).toString();
     QString sCrashReson = oCrashJsonObject.value(strCrashReason).toString();
     QString sCrashThreadIndex = QString::number(oCrashJsonObject.value(strCrashThreadIndex).toVariant().toInt());
-    m_sCrashStackInfo += "crash_address:" + sCrashAddress + "\n";
-    m_sCrashStackInfo += "crash_reason:" + sCrashReson + "\n\n\n";
+    m_sCrashStackInfo += QStringLiteral("崩溃地址:") + sCrashAddress + "\n";
+    m_sCrashStackInfo += QStringLiteral("崩溃原因:") + sCrashReson + "\n\n\n";
 
     //Crash堆栈信息
     QJsonArray oJsonArray = oThreadJsonObject.value(sCrashThreadIndex).toArray();
@@ -42,7 +42,7 @@ void JiraAnalysisDumpListOper::analysisStack(const QString& sDumpJson)
         QString sSourceFile = oJsonObject.value(strSourceFile).toString();
         QString sSourceLine = oJsonObject.value(strSourceLine).toString();
         QString sFunction = oJsonObject.value(strFunction).toString();
-        m_sCrashStackInfo += sFrame + "  " + sModule + "    " + sSourceFile + "  " + sSourceLine + "  " + sFunction + "\n";
+        m_sCrashStackInfo += sFrame + "  " + sModule + "    " + sFunction +  "    " + sSourceFile + "  " + sSourceLine + "\n";
     }
 }
 
@@ -178,4 +178,14 @@ QString JiraAnalysisDumpListOper::highFrequency()
 QString JiraAnalysisDumpListOper::stackInfo()
 {
     return m_sCrashStackInfo;
+}
+
+/*!
+*@brief        崩溃次数 
+*@author       sunjj 2017年12月21日
+*@return       QString
+*/
+QString JiraAnalysisDumpListOper::crashCount()
+{
+    return QStringLiteral("崩溃%1次").arg(m_pScriptContainer->size());
 }

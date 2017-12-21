@@ -73,7 +73,7 @@ void JiraBatchCrashInfoOper::beforeBatch()
     oLoginInfo.sJiarUrl = "http://pm.glodon.com/newjira/";
     oLoginInfo.sUserName = "sunjj";
     oLoginInfo.sPassword = "52zhaodan!";
-    oLoginInfo.sProductCode = "GTJ2017";
+    oLoginInfo.sProductCode = "gtj2017";
     m_pCPlusToPythonOper->LoginPlatform(&oLoginInfo);
 
     //清空日志信息

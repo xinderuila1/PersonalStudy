@@ -115,9 +115,12 @@ void JiraAnalysisModuleOper::parseCrashInfo()
         m_pCrashUpdateInfo->sDetailInfo = "";
         m_pCrashUpdateInfo->sAutoTest = "";
     }
+
     m_pCrashUpdateInfo->sRemarks = m_pAnalysisDumpListOper->remarks();
     m_pCrashUpdateInfo->sDumpUrl = m_pAnalysisDumpListOper->dumpUrl();
     m_pCrashUpdateInfo->sHighFrequency = m_pAnalysisDumpListOper->highFrequency();
+    m_pCrashUpdateInfo->sStackInfo = m_pAnalysisDumpListOper->stackInfo();
+    m_pCrashUpdateInfo->sCrashCount = m_pAnalysisDumpListOper->crashCount();
 }
 
 /*!

@@ -128,6 +128,8 @@ void JiraAnalysisPythonOper::updateIssue(CrashUpdateInfo *pUpdateInfo)
     PyDict_SetItemString(pDict, "remark", Py_BuildValue("s", pUpdateInfo->sRemarks.toStdString().c_str()));
     PyDict_SetItemString(pDict, "dumpUrl", Py_BuildValue("s", pUpdateInfo->sDumpUrl.toStdString().c_str()));
     PyDict_SetItemString(pDict, "highFrequency", Py_BuildValue("s", pUpdateInfo->sHighFrequency.toStdString().c_str()));
+    PyDict_SetItemString(pDict, "stackInfo", Py_BuildValue("s", pUpdateInfo->sStackInfo.toStdString().c_str()));
+    PyDict_SetItemString(pDict, "crashCount", Py_BuildValue("s", pUpdateInfo->sCrashCount.toStdString().c_str()));
     PyTuple_SetItem(pArgs, 0, pDict); 
     PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "updateIssue", "O", pArgs);
     Py_DECREF(pReturn);
