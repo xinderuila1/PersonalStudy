@@ -106,6 +106,7 @@
     <ClCompile Include="JiraBatchTool.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Warning\JiraIntelligentWaringOper.cpp" />
+    <ClCompile Include="Warning\JiraIntelligentWaringOutputHtml.cpp" />
     <ClCompile Include="Warning\JiraIntelligentWaringPython.cpp" />
     <ClCompile Include="Warning\JiraIntelligentWaringThread.cpp" />
   </ItemGroup>
@@ -131,6 +132,7 @@
     <ClInclude Include="Common\JiraConsts.h" />
     <ClInclude Include="Common\TestCommon.h" />
     <ClInclude Include="Warning\JiraIntelligentWaringOper.h" />
+    <ClInclude Include="Warning\JiraIntelligentWaringOutputHtml.h" />
     <ClInclude Include="Warning\JiraIntelligentWaringPython.h" />
     <CustomBuild Include="Warning\JiraIntelligentWaringThread.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

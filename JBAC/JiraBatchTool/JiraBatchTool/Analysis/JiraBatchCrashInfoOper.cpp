@@ -18,10 +18,10 @@
 *@author       sunjj 2017年2月28日
 */
 JiraBatchCrashInfoOper::JiraBatchCrashInfoOper()
-    :m_pCrashKeyMap(nullptr), m_pCPlusToPythonOper(nullptr), m_pAnalysisModuleOper(nullptr),
+    :m_pCrashKeyMap(nullptr), m_pAnalysisPythonOper(nullptr), m_pAnalysisModuleOper(nullptr),
     m_pAnalysisBelongOper(nullptr), m_pAnalysisVersionOper(nullptr)
 {
-    m_pCPlusToPythonOper = new JiraAnalysisPythonOper;
+    m_pAnalysisPythonOper = new JiraAnalysisPythonOper;
     m_pAnalysisDumpListOper = new JiraAnalysisDumpListOper;
     m_pAnalysisModuleOper = new JiraAnalysisModuleOper(m_pAnalysisDumpListOper);
     m_pAnalysisBelongOper = new JiraAnalysisBelongOper(m_pAnalysisDumpListOper);
@@ -46,8 +46,8 @@ JiraBatchCrashInfoOper::~JiraBatchCrashInfoOper()
     delete m_pAnalysisDumpListOper;
     m_pAnalysisDumpListOper = nullptr;
 
-    delete m_pCPlusToPythonOper;
-    m_pCPlusToPythonOper = nullptr;
+    delete m_pAnalysisPythonOper;
+    m_pAnalysisPythonOper = nullptr;
 }
 
 /*!
@@ -74,7 +74,7 @@ void JiraBatchCrashInfoOper::beforeBatch()
     oLoginInfo.sUserName = "sunjj";
     oLoginInfo.sPassword = "52zhaodan!";
     oLoginInfo.sProductCode = "gtj2017";
-    m_pCPlusToPythonOper->LoginPlatform(&oLoginInfo);
+    m_pAnalysisPythonOper->LoginPlatform(&oLoginInfo);
 
     //清空日志信息
     QSettings oSettings(qApp->applicationDirPath() + "/logInfo/analysisCrashLog.ini", QSettings::IniFormat);
@@ -97,7 +97,7 @@ void JiraBatchCrashInfoOper::afterBatch()
 */
 void JiraBatchCrashInfoOper::searchCrashInfo(const QString& sSql)
 {
-    m_pCrashKeyMap = m_pCPlusToPythonOper->searchCrashInfo(sSql);
+    m_pCrashKeyMap = m_pAnalysisPythonOper->searchCrashInfo(sSql);
 } 
 
 /*!
@@ -111,15 +111,15 @@ void JiraBatchCrashInfoOper::analysisCrashInfo()
     for (auto pIter = m_pCrashKeyMap->begin(); pIter != m_pCrashKeyMap->end(); ++pIter)
     {
         QString sCrashKey = pIter->first;
-        m_pCPlusToPythonOper->searchIssue(sCrashKey);
-        m_pCPlusToPythonOper->beforeAnalysis();
-        sDumpJson = m_pCPlusToPythonOper->analysisIssue();
+        m_pAnalysisPythonOper->searchIssue(sCrashKey);
+        m_pAnalysisPythonOper->beforeAnalysis();
+        sDumpJson = m_pAnalysisPythonOper->analysisIssue();
         m_pAnalysisDumpListOper->refreshDumpCotainer(sDumpJson);
-        sCrashStack = m_pCPlusToPythonOper->downloadStack(m_pAnalysisDumpListOper->stackUrlId());
+        sCrashStack = m_pAnalysisPythonOper->downloadStack(m_pAnalysisDumpListOper->stackUrlId());
         m_pAnalysisDumpListOper->analysisStack(sCrashStack);
-        m_pCPlusToPythonOper->updateIssue(parseCrashBelong());
+        m_pAnalysisPythonOper->updateIssue(parseCrashBelong());
         m_pAnalysisDumpListOper->clearDumpCotainer();
-        m_pCPlusToPythonOper->afterAnalysis();
+        m_pAnalysisPythonOper->afterAnalysis();
     }
 }
 
@@ -139,7 +139,7 @@ CrashUpdateInfo* JiraBatchCrashInfoOper::parseCrashBelong()
         return pFromDllStack;
     }
 
-    QString sProductVersion = m_pCPlusToPythonOper->productVersion();
+    QString sProductVersion = m_pAnalysisPythonOper->productVersion();
     if (m_pAnalysisVersionOper->needDivideByVersion(sProductVersion, pFromScript->sModuleID, pFromDllStack->sModuleID))
     {
         CrashUpdateInfo* pVersionInfo = m_pAnalysisVersionOper->parseModule();

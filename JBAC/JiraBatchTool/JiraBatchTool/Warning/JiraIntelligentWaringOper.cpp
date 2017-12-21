@@ -1,6 +1,7 @@
 #include "JiraIntelligentWaringOper.h"
 #include "JiraIntelligentWaringPython.h"
 #include "Common/JiraConsts.h"
+#include "Warning/JiraIntelligentWaringOutputHtml.h"
 
 #include <QDebug>
 #include <QFile>
@@ -13,6 +14,16 @@
 #include <QJsonArray>
 
 #define  MIN_CRASH_COUNT  2
+
+//html文件 测试用
+QString htmlFilePath()
+{
+    QString sProductInfo = "GTJ2017" + "_" + "1.0.9.0";
+    QString sResult = qApp->applicationDirPath() + "//htmlFile//" + sProductInfo + ".html";
+    if (QFile::exists(sResult))
+        QFile::remove(sResult);
+    return sResult;
+}
 
 /*!
 *@brief        构造函数 
@@ -70,13 +81,13 @@ void JiraIntelligentWaringOper::analysisCurDayCrash(bool bClear)
 void JiraIntelligentWaringOper::loadUnAnalysisCrash()
 {
     QJsonDocument oJsonDocument = QJsonDocument::fromJson(m_sUnAnalysisCrash.toUtf8());
-    QJsonArray oCrashListArray = oJsonDocument.object().value("list").toArray();
+    QJsonArray oCrashListArray = oJsonDocument.object().value(strList).toArray();
     for (int nIndex = 0; nIndex < oCrashListArray.size(); ++nIndex)
     {
         QJsonObject oJsonObject = oCrashListArray.at(nIndex).toObject();
-        QString sDeviceID = oJsonObject.value("deviceId").toString();
-        QString sDescription = oJsonObject.value("description").toString();
-        qint64 nCrashTime = oJsonObject.value("crashTime").toVariant().toLongLong();
+        QString sDeviceID = oJsonObject.value(strDeviceId).toString();
+        QString sDescription = oJsonObject.value(strDescription).toString();
+        qint64 nCrashTime = oJsonObject.value(strCrashTime).toVariant().toLongLong();
 
         auto pFindDeviceID = m_pUnAnalysisCrashUsers->find(sDeviceID);
         if (pFindDeviceID == m_pUnAnalysisCrashUsers->end())
@@ -159,15 +170,13 @@ void JiraIntelligentWaringOper::analysisCurrentCrash()
 /*!
 *@brief        比较崩溃次数 
 *@author       sunjj 2017年12月11日
-*@param[in]    const QJsonObject& oFirstObj
-*@param[in]    const QJsonObject& oSecondObj
+*@param[in]    const JiraWarningCrashInfo& oFirstObj
+*@param[in]    const JiraWarningCrashInfo& oSecondObj
 *@return       bool
 */
-bool compareHighLevel(const QJsonObject& oFirstObj, const QJsonObject& oSecondObj)
+bool compareHighLevel(const JiraWarningCrashInfo& oFirstObj, const JiraWarningCrashInfo& oSecondObj)
 {
-    int nFirstValue = oFirstObj.value(DEVICE_CRASH_COUNT).toVariant().toInt();
-    int nSecondValue = oSecondObj.value(DEVICE_CRASH_COUNT).toVariant().toInt();
-    return nFirstValue > nSecondValue;
+    return oFirstObj.nTotalCount > oSecondObj.nTotalCount;
 }
 
 /*!
@@ -202,44 +211,49 @@ void JiraIntelligentWaringOper::sendEmailToTesters()
             return oDataTime.toString("yyyy-MM-dd hh:mm:ss");
         };
 
-
-        std::vector<QJsonObject> oJsonObjectVec;
-
-        QJsonArray oJsonArray;
+        //新增用户描述信息
+        JiraWarningCrashContainer oNewUserCrash;
         for (auto pHighCrashIter = m_pHighCrashUsers->begin(); pHighCrashIter != m_pHighCrashUsers->end(); ++pHighCrashIter)
         {
-            QString sDevicedId = pHighCrashIter->first;
-            QString sDescription = mapToString(pHighCrashIter->second);
-            QString sLastCrashTime = lastCrashTime(pHighCrashIter->second);
-            auto pCrashCountIter = m_pHighCrashCount->find(sDevicedId);
+            auto pCrashCountIter = m_pHighCrashCount->find(pHighCrashIter->first);
             if (pCrashCountIter == m_pHighCrashCount->end())
                 continue;
 
-            int nAllCrashCount = pCrashCountIter->second.first;
-            int nNewCrashCount = pCrashCountIter->second.second;
-            
-            QJsonObject oJsonObject;
-            oJsonObject.insert(DEVICE_ID, sDevicedId);
-            oJsonObject.insert(DEVICE_CRASH_COUNT, nAllCrashCount);
-            oJsonObject.insert(NEW_CRASH_COUNT, nNewCrashCount);
-            oJsonObject.insert(LAST_CRASH_TIME, sLastCrashTime);
-            oJsonObject.insert(NEW_CRASH_DETAIL, sDescription);
-            oJsonObjectVec.push_back(oJsonObject);
+            JiraWarningCrashInfo oCrashInfo;
+            oCrashInfo.sDeviceID = pHighCrashIter->first;
+            oCrashInfo.nTotalCount = pCrashCountIter->second.first;
+            oCrashInfo.nNewCount = pCrashCountIter->second.second;
+            oCrashInfo.sLastCrashTime = lastCrashTime(pHighCrashIter->second);
+            oCrashInfo.sDetailInfo = mapToString(pHighCrashIter->second);
         }
 
-        std::sort(oJsonObjectVec.begin(), oJsonObjectVec.end(), compareHighLevel);
-
-        for (auto pHighCrashIter = oJsonObjectVec.begin(); pHighCrashIter != oJsonObjectVec.end(); ++pHighCrashIter)
+        //全部用户描述信息
+        JiraWarningCrashContainer oAllUserCrash;
+        for (auto pAnalysisedCrashIter = m_pAnalysisedCrashUsers->begin(); pAnalysisedCrashIter != m_pAnalysisedCrashUsers->end(); ++pAnalysisedCrashIter)
         {
-            QJsonObject oJsonObject = *pHighCrashIter;
-            oJsonArray.append(QJsonValue(oJsonObject));
+            JiraWarningCrashInfo oCrashInfo;
+            oCrashInfo.sDeviceID = pAnalysisedCrashIter->first;
+            oCrashInfo.nTotalCount = pAnalysisedCrashIter->second.size();
+            oCrashInfo.sLastCrashTime = lastCrashTime(pAnalysisedCrashIter->second);
+            oCrashInfo.sDetailInfo = mapToString(pAnalysisedCrashIter->second);
         }
-        
-        QJsonDocument oJsonDocument;
-        oJsonDocument.setArray(oJsonArray);
-        QString sSendEmailContent = oJsonDocument.toJson();
 
-        m_pIntelligentWaringPython->sendEmailToTesters(sSendEmailContent);
+        //按照崩溃次数由大到小排序
+        std::sort(oNewUserCrash.begin(), oNewUserCrash.end(), compareHighLevel);
+        std::sort(oAllUserCrash.begin(), oAllUserCrash.end(), compareHighLevel);
+        
+        QString sHtmlPath = htmlFilePath();
+        JiraProductInfo oProductInfo;
+        oProductInfo.sProductKey = "GTJ2017";
+        oProductInfo.sProductName = QStringLiteral("云计量土建");
+        oProductInfo.sProductVersion = "1.0.9.0";
+
+        JiraIntelligentWaringOutputHtml oOutputHtml;
+        oOutputHtml.setoutputpath(sHtmlPath);
+        oOutputHtml.setproductInfo(oProductInfo.productInfo());
+        oOutputHtml.outputHtml(&oAllUserCrash, &oNewUserCrash);
+
+        m_pIntelligentWaringPython->sendEmailToTesters(sHtmlPath);
     }
 }
 

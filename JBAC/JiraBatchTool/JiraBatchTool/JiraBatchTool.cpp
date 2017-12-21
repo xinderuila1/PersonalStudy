@@ -22,9 +22,30 @@ static const QString sHintInfo = QStringLiteral("核心功能：自动分析Crash所属团队
  //问题类型：GTJ产品、Crash类型、未解决的、无归属团队的
 static const QString sDefaultJql = QStringLiteral("project in (GTJTJ) AND issuetype = Crash AND status in (打开的, 进行中) AND 问题归属= NULL");
 
+#include "Warning/JiraIntelligentWaringOutputHtml.h"
+
 JiraBatchTool::JiraBatchTool(QWidget *parent)
     : QDialog(parent)
 {
+    JiraWarningCrashContainer oContainer;
+    JiraWarningCrashInfo oCrashInfo;
+    oCrashInfo.sDeviceID = "4b6ab0c4-2a89-47cd-a806-a54f6f9e53f9";
+    oCrashInfo.nTotalCount = 100;
+    oCrashInfo.nNewCount = 20;
+    oCrashInfo.sLastCrashTime = "2017 11 29 21 : 30";
+    oCrashInfo.sDetailInfo = "hello world hahahah= hhaha1";
+    oContainer.push_back(oCrashInfo);
+
+    JiraProductInfo oProductInfo;
+    oProductInfo.sProductKey = "GTJ2017";
+    oProductInfo.sProductName = QStringLiteral("云计量土建");
+    oProductInfo.sProductVersion = "1.0.9.0";
+
+    JiraIntelligentWaringOutputHtml oTest;
+    oTest.setoutputpath("E:\\2222.html");
+    oTest.setproductInfo(oProductInfo.productInfo());
+    oTest.outputHtml(&oContainer, &oContainer);
+
     //ui.setupUi(this);
     initUI();
     initConnect();

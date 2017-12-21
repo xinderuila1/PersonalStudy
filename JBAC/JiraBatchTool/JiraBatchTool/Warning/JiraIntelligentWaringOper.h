@@ -13,12 +13,9 @@
 #include <QString>
 #include <map>
 #include <vector>
+#include "Common/JiraConsts.h"
 
 class JiraIntelligentWaringPython;
-         
-typedef std::map<QString, std::map<qint64, QString>> JiraAnalysisCrashUsers; //未分析用户设备集合 设备ID-崩溃时间-崩溃描述
-typedef JiraAnalysisCrashUsers JiraHighCrashUsers;                            //需重点关注的高频次崩溃用户
-typedef std::map<QString, std::pair<int, int>> JiraHighCrashCount;            //崩溃次数统计
 
 class JiraIntelligentWaringOper
 {

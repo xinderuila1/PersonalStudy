@@ -37,7 +37,7 @@ private:
 
 private:
     JiraCrashKeyContainer *m_pCrashKeyMap;
-    JiraAnalysisPythonOper *m_pCPlusToPythonOper;
+    JiraAnalysisPythonOper *m_pAnalysisPythonOper;
     JiraAnalysisModuleOper *m_pAnalysisModuleOper;
     JiraAnalysisBelongOper *m_pAnalysisBelongOper;
     JiraAnalysisVersionOper* m_pAnalysisVersionOper;

@@ -141,7 +141,7 @@ public:
     }
 };
 
-//dll信息容器
+//智能分类专用
 typedef std::map<QString, JiraDllInfo> JiraDllContainer;
 typedef std::map<QString, QString> JiraCrashKeyContainer;
 typedef std::map<QString, bool> JiraAnalysisLogInfo;
@@ -150,6 +150,34 @@ typedef std::map<QString, JiraModuleInfo> JiraUserModuleContainer;
 typedef std::vector<AutoScriptInfo> AutoScriptContainer;
 typedef std::vector<QString> JiraVersionContainer;
 
+
+//智能预警专用
+typedef std::map<QString, std::map<qint64, QString>> JiraAnalysisCrashUsers; //未分析用户设备集合 设备ID-崩溃时间-崩溃描述
+typedef JiraAnalysisCrashUsers JiraHighCrashUsers;                            //需重点关注的高频次崩溃用户
+typedef std::map<QString, std::pair<int, int>> JiraHighCrashCount;            //崩溃次数统计
+
+struct JiraWarningCrashInfo
+{
+    QString sDeviceID;  //设备ID
+    int nTotalCount;    //总共崩溃数量
+    int nNewCount;      //新增崩溃数量
+    QString sLastCrashTime; //最后崩溃时间
+    QString sDetailInfo; //崩溃描述
+};
+
+typedef std::vector<JiraWarningCrashInfo> JiraWarningCrashContainer;  //崩溃信息容器
+
+struct JiraProductInfo
+{
+    QString sProductKey;   //产品标识
+    QString sProductName;  //产品名称
+    QString sProductVersion; //产品标识
+public:
+    QString productInfo()
+    {
+        return sProductKey + sProductName + sProductVersion;
+    }
+};
 static const QString strModule = "module";
 static const QString strFunction = "function";
 static const QString strVersion = "version";
@@ -179,7 +207,7 @@ static const QString strCrash = "crash";
 static const QString strThreads = "threads";
 static const QString strList = "list";
 static const QString strCrashTime = "crashTime";
-
+static const QString strDeviceId = "deviceId";
 
 #define STR_IS_AUTO_TEST QStringLiteral("...自动化：")
 #define SUBMITTERS QStringLiteral("...提交人：")
@@ -190,11 +218,11 @@ static const QString strCrashTime = "crashTime";
 #define CRASH_REASON QStringLiteral("崩溃原因:")
 #define CRASH_COUNT QStringLiteral("崩溃%1次")
 
-#define DEVICE_CRASH_COUNT QStringLiteral("b_设备崩溃总数")
-#define DEVICE_ID QStringLiteral("a_设备ID")
-#define NEW_CRASH_COUNT QStringLiteral("c_新增崩溃数目")
-#define LAST_CRASH_TIME QStringLiteral("d_末次崩溃时间")
-#define NEW_CRASH_DETAIL QStringLiteral("e_新增崩溃描述")
+// #define DEVICE_CRASH_COUNT QStringLiteral("b_设备崩溃总数")
+// #define DEVICE_ID QStringLiteral("a_设备ID")
+// #define NEW_CRASH_COUNT QStringLiteral("c_新增崩溃数目")
+// #define LAST_CRASH_TIME QStringLiteral("d_末次崩溃时间")
+// #define NEW_CRASH_DETAIL QStringLiteral("e_新增崩溃描述")
 
 #define YES QStringLiteral("是")
 #define NO QStringLiteral("否")
