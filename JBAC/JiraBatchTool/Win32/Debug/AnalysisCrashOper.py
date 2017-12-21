@@ -153,7 +153,7 @@ class AnalysisCrashOper:
         crash_PdbAddress = self.__pdbAddress % (self.__productCode, self.__productVersion)                
     
         #添加备注
-        comment_detail = u'dump下载地址：' + crash_DumpAddress + '\n' + u'pdb 下载地址：' + crash_PdbAddress + '\n\n' + u'Crash详细报告：' + remark
+        comment_detail = u'dump下载地址：' + crash_DumpAddress + '\n' + u'pdb 下载地址：' + crash_PdbAddress + '\n\n' + u'Crash详细报告：\n' + remark
         self.__jira.add_comment(self.__issue, comment_detail)  
         
         #堆栈信息

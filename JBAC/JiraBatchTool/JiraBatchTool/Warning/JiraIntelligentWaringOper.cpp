@@ -1,5 +1,6 @@
 #include "JiraIntelligentWaringOper.h"
 #include "JiraIntelligentWaringPython.h"
+#include "Common/JiraConsts.h"
 
 #include <QDebug>
 #include <QFile>
@@ -164,8 +165,8 @@ void JiraIntelligentWaringOper::analysisCurrentCrash()
 */
 bool compareHighLevel(const QJsonObject& oFirstObj, const QJsonObject& oSecondObj)
 {
-    int nFirstValue = oFirstObj.value(QStringLiteral("b_设备崩溃总数")).toVariant().toInt();
-    int nSecondValue = oSecondObj.value(QStringLiteral("b_设备崩溃总数")).toVariant().toInt();
+    int nFirstValue = oFirstObj.value(DEVICE_CRASH_COUNT).toVariant().toInt();
+    int nSecondValue = oSecondObj.value(DEVICE_CRASH_COUNT).toVariant().toInt();
     return nFirstValue > nSecondValue;
 }
 
@@ -218,11 +219,11 @@ void JiraIntelligentWaringOper::sendEmailToTesters()
             int nNewCrashCount = pCrashCountIter->second.second;
             
             QJsonObject oJsonObject;
-            oJsonObject.insert(QStringLiteral("a_设备ID"), sDevicedId);
-            oJsonObject.insert(QStringLiteral("b_设备崩溃总数"), nAllCrashCount);
-            oJsonObject.insert(QStringLiteral("c_新增崩溃数目"), nNewCrashCount);
-            oJsonObject.insert(QStringLiteral("d_末次崩溃时间"), sLastCrashTime);
-            oJsonObject.insert(QStringLiteral("e_新增崩溃描述"), sDescription);
+            oJsonObject.insert(DEVICE_ID, sDevicedId);
+            oJsonObject.insert(DEVICE_CRASH_COUNT, nAllCrashCount);
+            oJsonObject.insert(NEW_CRASH_COUNT, nNewCrashCount);
+            oJsonObject.insert(LAST_CRASH_TIME, sLastCrashTime);
+            oJsonObject.insert(NEW_CRASH_DETAIL, sDescription);
             oJsonObjectVec.push_back(oJsonObject);
         }
 

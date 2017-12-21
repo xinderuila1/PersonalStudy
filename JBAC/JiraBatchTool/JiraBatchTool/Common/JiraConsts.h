@@ -96,6 +96,7 @@ struct AutoScriptInfo
     QString sDetailInfo;
     QString sDumpUrl;
     QString sStackId;
+    QString sCrashTime;
 };
 
 //Crash中需要更新的信息
@@ -177,9 +178,26 @@ static const QString strReport = "report";
 static const QString strCrash = "crash";
 static const QString strThreads = "threads";
 static const QString strList = "list";
-static const QString strIsAutoTest = "IsAutoTest";
-static const QString strSubmitters = "Submitter";
-static const QString strDetailInfo = "DetailInfo";
+static const QString strCrashTime = "crashTime";
+
+
+#define STR_IS_AUTO_TEST QStringLiteral("...自动化：")
+#define SUBMITTERS QStringLiteral("...提交人：")
+#define DETAILINFO QStringLiteral("...描述：")
+#define CRASH_TIME QStringLiteral("...时间：")
+
+#define CRASH_ADDRESS QStringLiteral("崩溃地址:")
+#define CRASH_REASON QStringLiteral("崩溃原因:")
+#define CRASH_COUNT QStringLiteral("崩溃%1次")
+
+#define DEVICE_CRASH_COUNT QStringLiteral("b_设备崩溃总数")
+#define DEVICE_ID QStringLiteral("a_设备ID")
+#define NEW_CRASH_COUNT QStringLiteral("c_新增崩溃数目")
+#define LAST_CRASH_TIME QStringLiteral("d_末次崩溃时间")
+#define NEW_CRASH_DETAIL QStringLiteral("e_新增崩溃描述")
+
+#define YES QStringLiteral("是")
+#define NO QStringLiteral("否")
 
 // Jira 归属团队ID字段标识类
 // 钢筋计算： 18930 a

@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <QDateTime>
 
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -29,8 +30,8 @@ void JiraAnalysisDumpListOper::analysisStack(const QString& sDumpJson)
     QString sCrashAddress = oCrashJsonObject.value(strCrashAddress).toString();
     QString sCrashReson = oCrashJsonObject.value(strCrashReason).toString();
     QString sCrashThreadIndex = QString::number(oCrashJsonObject.value(strCrashThreadIndex).toVariant().toInt());
-    m_sCrashStackInfo += QStringLiteral("崩溃地址:") + sCrashAddress + "\n";
-    m_sCrashStackInfo += QStringLiteral("崩溃原因:") + sCrashReson + "\n\n\n";
+    m_sCrashStackInfo += CRASH_ADDRESS + sCrashAddress + "\n";
+    m_sCrashStackInfo += CRASH_REASON + sCrashReson + "\n\n\n";
 
     //Crash堆栈信息
     QJsonArray oJsonArray = oThreadJsonObject.value(sCrashThreadIndex).toArray();
@@ -93,6 +94,8 @@ void JiraAnalysisDumpListOper::refreshDumpCotainer(const QString& sDumpJson)
         oScriptInfo.sSubmitter = oJsonObject.value(strSubmitter).toString();
         oScriptInfo.sDetailInfo = oJsonObject.value(strDescription).toString();
         oScriptInfo.sDumpUrl = oJsonObject.value(strDumpId).toString();
+        qint64 nCrashTime = oJsonObject.value(strCrashTime).toVariant().toLongLong();
+        oScriptInfo.sCrashTime = QDateTime::fromMSecsSinceEpoch(nCrashTime).toString("yyyy-MM-dd hh:mm:ss");
         oScriptInfo.sStackId = QString::number(oJsonObject.value(strStackId).toVariant().toULongLong());
         m_pScriptContainer->push_back(oScriptInfo);
     }
@@ -145,19 +148,19 @@ QString JiraAnalysisDumpListOper::dumpUrl()
 */
 QString JiraAnalysisDumpListOper::remarks()
 {
-    QJsonArray oJsonArray;
+    QString sRemarks = "";
     for (auto pIter = m_pScriptContainer->begin(); pIter != m_pScriptContainer->end(); ++pIter)
     {
         AutoScriptInfo oScriptInfo = *pIter;
-        QJsonObject oJsonObject;
-        oJsonObject.insert(strIsAutoTest, oScriptInfo.bIsAutoScript);
-        oJsonObject.insert(strSubmitters, oScriptInfo.sSubmitter);
-        oJsonObject.insert(strDetailInfo, oScriptInfo.sDetailInfo);
-        oJsonArray.append(oJsonObject);
+        QString sDetailInfo = "";
+        sDetailInfo += DETAILINFO + oScriptInfo.sDetailInfo + "\n";
+        sDetailInfo += SUBMITTERS + oScriptInfo.sSubmitter + "\n";
+        sDetailInfo += CRASH_TIME + oScriptInfo.sCrashTime + "\n";
+        sDetailInfo += STR_IS_AUTO_TEST + (oScriptInfo.bIsAutoScript? YES : NO) + "\n";
+        sDetailInfo += "\n\n\n";
+        sRemarks += sDetailInfo;
     }
-    QJsonDocument oJsonDocument;
-    oJsonDocument.setArray(oJsonArray);
-    return oJsonDocument.toJson();
+    return sRemarks;
 }
 
 /*!
@@ -187,5 +190,5 @@ QString JiraAnalysisDumpListOper::stackInfo()
 */
 QString JiraAnalysisDumpListOper::crashCount()
 {
-    return QStringLiteral("崩溃%1次").arg(m_pScriptContainer->size());
+    return CRASH_COUNT.arg(m_pScriptContainer->size());
 }
