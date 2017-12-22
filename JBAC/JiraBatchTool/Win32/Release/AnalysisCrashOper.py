@@ -147,18 +147,18 @@ class AnalysisCrashOper:
             if sInfoDict['stackInfo']:
                 #堆栈信息
                 stackInfo = sInfoDict['stackInfo']
+            if sInfoDict['dumpUrl']:
+                #dump及pdb地址    
+                crash_DumpAddress = self.__dumpAddress % (self.__productCode, self.__productVersion, sInfoDict['dumpUrl'])
+                crash_PdbAddress = self.__pdbAddress % (self.__productCode, self.__productVersion)                
     
-        #dump及pdb地址    
-        crash_DumpAddress = self.__dumpAddress % (self.__productCode, self.__productVersion, sInfoDict['dumpUrl'])
-        crash_PdbAddress = self.__pdbAddress % (self.__productCode, self.__productVersion)                
-    
-        #添加备注
-        comment_detail = u'dump下载地址：' + crash_DumpAddress + '\n' + u'pdb 下载地址：' + crash_PdbAddress + '\n\n' + u'Crash详细报告：\n' + remark
-        self.__jira.add_comment(self.__issue, comment_detail)  
-        
-        #堆栈信息
-        comment_stack = u'stack堆栈信息：'+ '\n\n' + stackInfo
-        self.__jira.add_comment(self.__issue, comment_stack)
+                #添加备注
+                comment_detail = u'dump下载地址：' + crash_DumpAddress + '\n' + u'pdb 下载地址：' + crash_PdbAddress + '\n\n' + u'Crash详细报告：\n' + remark
+                self.__jira.add_comment(self.__issue, comment_detail)  
+                
+                #堆栈信息
+                comment_stack = u'stack堆栈信息：'+ '\n\n' + stackInfo
+                self.__jira.add_comment(self.__issue, comment_stack)
 
         
 
