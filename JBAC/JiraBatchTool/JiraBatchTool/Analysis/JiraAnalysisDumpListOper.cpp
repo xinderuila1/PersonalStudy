@@ -153,10 +153,10 @@ QString JiraAnalysisDumpListOper::remarks()
     {
         AutoScriptInfo oScriptInfo = *pIter;
         QString sDetailInfo = "";
-        sDetailInfo += DETAILINFO + oScriptInfo.sDetailInfo + "\n";
-        sDetailInfo += SUBMITTERS + oScriptInfo.sSubmitter + "\n";
-        sDetailInfo += CRASH_TIME + oScriptInfo.sCrashTime + "\n";
-        sDetailInfo += STR_IS_AUTO_TEST + (oScriptInfo.bIsAutoScript? YES : NO) + "\n";
+        sDetailInfo += (DETAILINFO + oScriptInfo.sDetailInfo + "\n");
+        sDetailInfo += (SUBMITTERS + oScriptInfo.sSubmitter + "\n");
+        sDetailInfo += (CRASH_TIME + oScriptInfo.sCrashTime + "\n");
+        sDetailInfo += (STR_IS_AUTO_TEST + (oScriptInfo.bIsAutoScript? YES : NO) + "\n");
         sDetailInfo += "\n\n\n";
         sRemarks += sDetailInfo;
     }

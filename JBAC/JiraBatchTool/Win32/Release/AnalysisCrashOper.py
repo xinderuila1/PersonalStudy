@@ -120,6 +120,8 @@ class AnalysisCrashOper:
     #更新Jira
     def updateIssue(self, sInfoDict):
         if sInfoDict:
+            remark = ''
+            stackInfo = ''
             if sInfoDict['customfield_10801']:
                 #归属团队
                 self.__issue.update({'customfield_10801': {'id': sInfoDict['customfield_10801']}})
@@ -167,6 +169,7 @@ class AnalysisCrashOper:
 #test = AnalysisCrashOper()
 #test.initialise('http://pm.glodon.com/newjira/', 'sunjj', '52zhaodan!')
 #test.searchIssue('GTJTJ-2512')
-#test.analysisIssues()
+#sInfoDict = {'remark':"...描述", "customfield_10801":"11122", "assignee":"mazq-a", "description":"", "remark":"", "autoTest":"", "highFrequency":"", "crashCount":"", "stackInfo":"", "dumpUrl":"af73529a-c1b2-4592-8643-911c7e65efab"}
+#test.updateIssue(sInfoDict)
 #print 'hello'
 #//////////////////////////////////////////

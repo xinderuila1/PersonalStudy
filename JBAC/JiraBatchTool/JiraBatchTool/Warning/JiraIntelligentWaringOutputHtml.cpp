@@ -114,7 +114,7 @@ void JiraIntelligentWaringOutputHtml::addTableHead_AllUser(QFile* pFile)
     logFile<<"style=\"border-collapse: collapse; font-size: 10pt\" bordercolor=\"black\">\n";
 
     logFile<<"<tr class=\"StartRow\">\n";
-    logFile<<QStringLiteral("<td colspan=4><font color=\"red\"><b>今天全部高频崩溃</b></font></td>\n");
+    logFile<<QStringLiteral("<td colspan=4><font color=\"red\"><b>今天全部崩溃</b></font></td>\n");
     logFile<<"</tr>\n";
     logFile<<"<tr class=\"LabelRow\">\n";
     logFile<<QStringLiteral("<th width=\"20%\">设备ID</th>\n");
