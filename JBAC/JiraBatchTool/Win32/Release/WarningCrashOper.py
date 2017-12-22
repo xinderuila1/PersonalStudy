@@ -24,7 +24,7 @@ sys.setdefaultencoding('utf8')
 
 fromAdd = "SUNJJ@grandsoft.com.cn"
 toAdd = ['HUANGJ-D@glodon.com', 'XIAT@glodon.com', 'ZHAOFH-A@glodon.com', 'wul-b@glodon.com', 'shiqn@glodon.com', 'FANXN@glodon.com', 'wangwj-a@glodon.com']
-toCC  = ['houj@glodon.com', 'zhuy@glodon.com', 'xiell@glodon.com','SUNJJ@glodon.com', 'ZHANGYC-C@glodon.com', 'ZHANGH-AA@glodon.com', 'YANGWL-A@glodon.com', 'SHENC@glodon.com']
+toCsr = ['houj@glodon.com', 'zhuy@glodon.com', 'xiell@glodon.com','SUNJJ@glodon.com', 'ZHANGYC-C@glodon.com', 'ZHANGH-AA@glodon.com', 'YANGWL-A@glodon.com', 'SHENC@glodon.com']
 
 #fromAdd = "SUNJJ@grandsoft.com.cn"
 #toAdd = ["SUNJJ@grandsoft.com.cn"]  
