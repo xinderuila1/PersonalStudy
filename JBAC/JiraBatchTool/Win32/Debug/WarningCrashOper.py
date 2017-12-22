@@ -22,13 +22,13 @@ import codecs
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-#fromAdd = "SUNJJ@grandsoft.com.cn"
-#toAdd = ['HUANGJ-D@glodon.com', 'XIAT@glodon.com', 'ZHAOFH-A@glodon.com', 'wul-b@glodon.com', 'shiqn@glodon.com', 'FANXN@glodon.com', 'wangwj-a@glodon.com']
-#toCsr  = ['houj@glodon.com', 'zhuy@glodon.com', 'xiell@glodon.com','SUNJJ@glodon.com', 'ZHANGYC-C@glodon.com', 'ZHANGH-AA@glodon.com', 'YANGWL-A@glodon.com', 'SHENC@glodon.com', 'SUNJJ@grandsoft.com.cn']
-
 fromAdd = "SUNJJ@grandsoft.com.cn"
-toAdd = ["SUNJJ@grandsoft.com.cn"]  
-toCsr = ["SUNJJ@grandsoft.com.cn"]  
+toAdd = ['HUANGJ-D@glodon.com', 'XIAT@glodon.com', 'ZHAOFH-A@glodon.com', 'wul-b@glodon.com', 'shiqn@glodon.com', 'FANXN@glodon.com', 'wangwj-a@glodon.com','SUNJJ@glodon.com']
+toCsr = ['houj@glodon.com', 'zhuy@glodon.com', 'xiell@glodon.com', 'ZHANGYC-C@glodon.com', 'ZHANGH-AA@glodon.com', 'YANGWL-A@glodon.com', 'SHENC@glodon.com']
+
+#fromAdd = "SUNJJ@grandsoft.com.cn"
+#toAdd = ["SUNJJ@grandsoft.com.cn"]  
+#toCsr = ["SUNJJ@grandsoft.com.cn"]  
 
 class WarningCrashOper():
     '''
@@ -97,13 +97,10 @@ class WarningCrashOper():
         message['Subject'] = Header(mail_head, 'utf-8')
         message['From'] = strFrom
         message['To'] = strTo
-        message['Cc'] = toCsr
+        message['Cc'] = strCs
         
         smtpObj = smtplib.SMTP(mail_host)
         smtpObj.sendmail(fromAdd, toAdd, message.as_string())
         
-#ooo = WarningCrashOper()
-#ooo.sendEmailToTesters('G:/JiraBatchTool/PersonalStudy/JBAC/JiraBatchTool/Win32/Debug/htmlFile/gtj2017YY_User_Product1.0.9.0.html', 'gtj2017YY_User_Product1.0.9.0')
-#print 'hello'
 
     
