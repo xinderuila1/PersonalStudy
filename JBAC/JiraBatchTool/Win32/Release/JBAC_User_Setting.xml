@@ -17,7 +17,7 @@
 		<UserPassword></UserPassword>
 		<!-- 产品JiraURL -->
 		<JiraUrl>http://pm.glodon.com/newjira/</JiraUrl>
-		<FilterSql sql = "project = GTJTJ AND resolution = Unresolved"/>
+		<FilterSql sql = "project = GTJTJ AND resolution = Unresolved AND issuetype = Crash"/>
 	</JiraInfo>
 	
 	<!-- GEH信息 -->

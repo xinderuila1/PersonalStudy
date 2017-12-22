@@ -137,11 +137,11 @@ void JiraBatchTool::initUIForm()
 {
     QHBoxLayout* pMainHBox = new QHBoxLayout;
     QLabel* pLable = new QLabel;
-    pLable->setText(QStringLiteral("后台分析中... ^_^ 好用请给我点赞 ^_^"));
+    pLable->setText(QStringLiteral("后台分析中... ^_^ 好用请点赞 ^_^"));
     pMainHBox->addWidget(pLable);
     setLayout(pMainHBox);
 
-    setWindowTitle(QStringLiteral("JBAC  by sunjj"));
+    setWindowTitle(QStringLiteral("JBAC(Plus)  by sunjj"));
     resize(300, 100);
 }
 
