@@ -4,14 +4,7 @@
 #include "Analysis/JiraAnalysisBelongOper.h"
 #include "Analysis/JiraAnalysisDumpListOper.h"
 #include "Analysis/JiraAnalysisVersionOper.h"
-
-#include <QCoreApplication>
-#include <QFile>
-#include <QDir>
-#include <QDateTime>
-#include <QSettings>
-#include <QMessageBox>
-#include <QApplication>
+#include "Common/JiraUserCustomSetting.h"
 
 /*!
 *@brief        构造函数 
@@ -69,16 +62,15 @@ void JiraBatchCrashInfoOper::parseCrashInfo(const QString& sSql)
 */
 void JiraBatchCrashInfoOper::beforeBatch()
 {
-    LoginInfo oLoginInfo;
-    oLoginInfo.sJiarUrl = "http://pm.glodon.com/newjira/";
-    oLoginInfo.sUserName = "sunjj";
-    oLoginInfo.sPassword = "52zhaodan!";
-    oLoginInfo.sProductCode = "gtj2017";
-    m_pAnalysisPythonOper->LoginPlatform(&oLoginInfo);
+    std::shared_ptr<ProductInfo> oProductInfo = JiraUserCustomSetting::instance()->productInfo();
+    std::shared_ptr<JiraInfo> oJiraInfo = JiraUserCustomSetting::instance()->jiraInfo();
 
-    //清空日志信息
-    QSettings oSettings(qApp->applicationDirPath() + "/logInfo/analysisCrashLog.ini", QSettings::IniFormat);
-    oSettings.clear();
+    LoginInfo oLoginInfo;
+    oLoginInfo.sJiarUrl = oJiraInfo->sJiraUrl;
+    oLoginInfo.sUserName = oJiraInfo->sUserName;
+    oLoginInfo.sPassword = oJiraInfo->sPassword;
+    oLoginInfo.sProductCode = oProductInfo->sProductKey;
+    m_pAnalysisPythonOper->LoginPlatform(&oLoginInfo);
 }
 
 /*!

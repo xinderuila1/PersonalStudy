@@ -1,7 +1,9 @@
 #include "JiraBatchTool.h"
 #include "Common/TestCommon.h"
 #include "Analysis/JiraBatchCrashInfoOper.h"
+#include "Common/JiraUserCustomSetting.h"
 #include "Warning/JiraIntelligentWaringThread.h"
+#include "Analysis/JiraAnalysisCrashThread.h"
 
 #include <QLabel>
 #include <QLineEdit>
@@ -23,37 +25,17 @@ static const QString sHintInfo = QStringLiteral("核心功能：自动分析Crash所属团队
 static const QString sDefaultJql = QStringLiteral("project in (GTJTJ) AND issuetype = Crash AND status in (打开的, 进行中) AND 问题归属= NULL");
 
 #include "Warning/JiraIntelligentWaringOutputHtml.h"
-#include "Common/JiraUserCustomSetting.h"
+
 
 JiraBatchTool::JiraBatchTool(QWidget *parent)
     : QDialog(parent)
 {
+//     initUI();
+//     initConnect();
+    initUIForm();
     JiraUserCustomSetting::instance();
-
-    JiraWarningCrashContainer oContainer;
-    JiraWarningCrashInfo oCrashInfo;
-    oCrashInfo.sDeviceID = "4b6ab0c4-2a89-47cd-a806-a54f6f9e53f9";
-    oCrashInfo.nTotalCount = 100;
-    oCrashInfo.nNewCount = 20;
-    oCrashInfo.sLastCrashTime = "2017 11 29 21 : 30";
-    oCrashInfo.sDetailInfo = "hello world hahahah= hhaha1";
-    oContainer.push_back(oCrashInfo);
-
-    JiraProductInfo oProductInfo;
-    oProductInfo.sProductKey = "GTJ2017";
-    oProductInfo.sProductName = QStringLiteral("云计量土建");
-    oProductInfo.sProductVersion = "1.0.9.0";
-
-    JiraIntelligentWaringOutputHtml oTest;
-    oTest.setoutputpath("E:\\2222.html");
-    oTest.setproductInfo(oProductInfo.productInfo());
-    oTest.outputHtml(&oContainer, &oContainer);
-
-    //ui.setupUi(this);
-    initUI();
-    initConnect();
-    JiraIntelligentWarningThread* pThread = new JiraIntelligentWarningThread(this);
-    pThread->start();
+    initAutoWarningOper();
+    initAutoBelongOper();
 }
 
 JiraBatchTool::~JiraBatchTool()
@@ -114,6 +96,53 @@ void JiraBatchTool::showLogInfo()
     QString sLogInfo = qApp->applicationDirPath() + "/logInfo/analysisCrashLog.ini";
      if (QFile::exists(sLogInfo))
          QDesktopServices::openUrl(QUrl(sLogInfo, QUrl::TolerantMode));
+}
+
+/*!
+*@brief        初始化自动预警操作 
+*@author       sunjj 2017年12月22日
+*/
+void JiraBatchTool::initAutoWarningOper()
+{
+    std::shared_ptr<ProductInfo> oProductInfo = JiraUserCustomSetting::instance()->productInfo();
+    std::shared_ptr<JiraWarningVersionContainer> oWarningVersionContainer = JiraUserCustomSetting::instance()->warningVersionContainer();
+    for (auto pIter = oWarningVersionContainer->begin(); pIter != oWarningVersionContainer->end(); ++pIter)
+    {
+        YYNeedWarningVersion oNeedWarningVersion = *pIter;
+        JiraProductInfo oNeedWarningProduct;
+        oNeedWarningProduct.sVersionName = oNeedWarningVersion.sVersionName;
+        oNeedWarningProduct.sVersionId = oNeedWarningVersion.sVersionId;
+        oNeedWarningProduct.sProductKey = oProductInfo->sProductKey;
+        oNeedWarningProduct.sProductName = oProductInfo->sProductName;
+        JiraIntelligentWarningThread* pThread = new JiraIntelligentWarningThread(&oNeedWarningProduct, this);
+        pThread->start();
+    }
+}
+
+/*!
+*@brief        自动分配操作类 
+*@author       sunjj 2017年12月22日
+*/
+void JiraBatchTool::initAutoBelongOper()
+{
+    JiraAnalysisCrashThread* pThread = new JiraAnalysisCrashThread;
+    pThread->start();
+}
+
+/*!
+*@brief        初始化窗体 
+*@author       sunjj 2017年12月22日
+*/
+void JiraBatchTool::initUIForm()
+{
+    QHBoxLayout* pMainHBox = new QHBoxLayout;
+    QLabel* pLable = new QLabel;
+    pLable->setText(QStringLiteral("后台分析中... ^_^ 好用请给我点赞 ^_^"));
+    pMainHBox->addWidget(pLable);
+    setLayout(pMainHBox);
+
+    setWindowTitle(QStringLiteral("JBAC  by sunjj"));
+    resize(300, 100);
 }
 
 //问题解决思路：

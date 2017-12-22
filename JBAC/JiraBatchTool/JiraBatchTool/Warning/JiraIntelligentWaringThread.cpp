@@ -1,15 +1,17 @@
 #include "JiraIntelligentWaringThread.h"
 #include "JiraIntelligentWaringOper.h"
+#include "Common/JiraUserCustomSetting.h"
 
 /*!
 *@brief        构造函数 
 *@author       sunjj 2017年12月11日
 *@param[in]    QObject *parent (= 0)
 */
-JiraIntelligentWarningThread::JiraIntelligentWarningThread(QObject *parent /*= 0*/)
-    :QThread(parent)
+JiraIntelligentWarningThread::JiraIntelligentWarningThread(JiraProductInfo* pProductInfo, QObject *parent /*= 0*/)
+    :QThread(parent), m_nInterval(0)
 {
-    m_pIntelligentWaringOper = new JiraIntelligentWaringOper;
+    m_nInterval = JiraUserCustomSetting::instance()->autoWarning()->nTimeInterval;
+    m_pIntelligentWaringOper = new JiraIntelligentWaringOper(pProductInfo);
     m_pCurrentDay = QDate::currentDate();
 }
 
@@ -33,7 +35,8 @@ void JiraIntelligentWarningThread::run()
 {
     m_pTimer = new QTimer(this);
     connect(m_pTimer, SIGNAL(timeout()), this, SLOT(collectUserInfo()), Qt::QueuedConnection);
-    m_pTimer->start(1000 * 60 * 5);
+    m_pTimer->start(1000 * 60 * m_nInterval);
+    //m_pTimer->start(1000 * 10);
     exec();
 }
 
@@ -48,7 +51,5 @@ void JiraIntelligentWarningThread::collectUserInfo()
     if (bClear)
         m_pCurrentDay = QDate::currentDate();
 
-    //for test
-    bClear = true;
     m_pIntelligentWaringOper->analysisCurDayCrash(bClear);
 }

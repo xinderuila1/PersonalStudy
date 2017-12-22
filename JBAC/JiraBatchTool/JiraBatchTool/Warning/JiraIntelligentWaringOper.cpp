@@ -1,6 +1,7 @@
 #include "JiraIntelligentWaringOper.h"
 #include "JiraIntelligentWaringPython.h"
 #include "Common/JiraConsts.h"
+#include "Common/JiraUserCustomSetting.h"
 #include "Warning/JiraIntelligentWaringOutputHtml.h"
 
 #include <QDebug>
@@ -13,29 +14,24 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 
-#define  MIN_CRASH_COUNT  2
-
-//html文件 测试用
-QString htmlFilePath()
-{
-    QString sProductInfo = "GTJ2017";
-    QString sResult = qApp->applicationDirPath() + "//htmlFile//" + sProductInfo + ".html";
-    if (QFile::exists(sResult))
-        QFile::remove(sResult);
-    return sResult;
-}
+#define  MIN_CRASH_COUNT  JiraUserCustomSetting::instance()->autoWarning()->nHighCrashMinValue
 
 /*!
 *@brief        构造函数 
 *@author       sunjj 2017年12月11日
 */
-JiraIntelligentWaringOper::JiraIntelligentWaringOper()
+JiraIntelligentWaringOper::JiraIntelligentWaringOper(JiraProductInfo* pProductInfo)
+    :m_pProductInfo(nullptr)
 {
     m_pIntelligentWaringPython = new JiraIntelligentWaringPython;
     m_pAnalysisedCrashUsers = new JiraAnalysisCrashUsers;
     m_pUnAnalysisCrashUsers = new JiraAnalysisCrashUsers;
     m_pHighCrashUsers = new JiraHighCrashUsers;
     m_pHighCrashCount = new JiraHighCrashCount;
+    m_pProductInfo = new JiraProductInfo;
+    m_pProductInfo->assign(pProductInfo);
+
+    logingGehPlatForm();
 }
 
 /*!
@@ -44,6 +40,9 @@ JiraIntelligentWaringOper::JiraIntelligentWaringOper()
 */
 JiraIntelligentWaringOper::~JiraIntelligentWaringOper()
 {
+    delete m_pProductInfo;
+    m_pProductInfo = nullptr;
+
     delete m_pHighCrashCount;
     m_pHighCrashCount = nullptr;
 
@@ -225,6 +224,7 @@ void JiraIntelligentWaringOper::sendEmailToTesters()
             oCrashInfo.nNewCount = pCrashCountIter->second.second;
             oCrashInfo.sLastCrashTime = lastCrashTime(pHighCrashIter->second);
             oCrashInfo.sDetailInfo = mapToString(pHighCrashIter->second);
+            oNewUserCrash.push_back(oCrashInfo);
         }
 
         //全部用户描述信息
@@ -236,6 +236,7 @@ void JiraIntelligentWaringOper::sendEmailToTesters()
             oCrashInfo.nTotalCount = pAnalysisedCrashIter->second.size();
             oCrashInfo.sLastCrashTime = lastCrashTime(pAnalysisedCrashIter->second);
             oCrashInfo.sDetailInfo = mapToString(pAnalysisedCrashIter->second);
+            oAllUserCrash.push_back(oCrashInfo);
         }
 
         //按照崩溃次数由大到小排序
@@ -243,17 +244,12 @@ void JiraIntelligentWaringOper::sendEmailToTesters()
         std::sort(oAllUserCrash.begin(), oAllUserCrash.end(), compareHighLevel);
         
         QString sHtmlPath = htmlFilePath();
-        JiraProductInfo oProductInfo;
-        oProductInfo.sProductKey = "GTJ2017";
-        oProductInfo.sProductName = QStringLiteral("云计量土建");
-        oProductInfo.sProductVersion = "1.0.9.0";
-
         JiraIntelligentWaringOutputHtml oOutputHtml;
         oOutputHtml.setoutputpath(sHtmlPath);
-        oOutputHtml.setproductInfo(oProductInfo.productInfo());
+        oOutputHtml.setproductInfo(m_pProductInfo->productInfo());
         oOutputHtml.outputHtml(&oAllUserCrash, &oNewUserCrash);
 
-        m_pIntelligentWaringPython->sendEmailToTesters(sHtmlPath);
+        m_pIntelligentWaringPython->sendEmailToTesters(sHtmlPath, m_pProductInfo->productInfo());
     }
 }
 
@@ -289,6 +285,32 @@ void JiraIntelligentWaringOper::afterAnalysis()
 */
 void JiraIntelligentWaringOper::downloadUnAnalysisCrash()
 {
-    m_sUnAnalysisCrash = m_pIntelligentWaringPython->downloadUnAnalysisCrash();
+    m_sUnAnalysisCrash = m_pIntelligentWaringPython->downloadUnAnalysisCrash(m_pProductInfo);
+}
+
+/*!
+*@brief        输出报告路径 
+*@author       sunjj 2017年12月22日
+*@return       QString
+*/
+QString JiraIntelligentWaringOper::htmlFilePath()
+{
+    QString sResult = qApp->applicationDirPath() + "/htmlFile/" + m_pProductInfo->productInfo() + ".html";
+    if (QFile::exists(sResult))
+        QFile::remove(sResult);
+    return sResult;
+}
+
+/*!
+*@brief        登录异常捕获平台 
+*@author       sunjj 2017年12月22日
+*/
+void JiraIntelligentWaringOper::logingGehPlatForm()
+{
+    std::shared_ptr<GEHInfo> oGehInfo= JiraUserCustomSetting::instance()->gehInfo();
+    LoginInfo oLoginInfo;
+    oLoginInfo.sUserName = oGehInfo->sUserName;
+    oLoginInfo.sPassword = oGehInfo->sPassword;
+    m_pIntelligentWaringPython->LoginPlatform(&oLoginInfo);
 }
 

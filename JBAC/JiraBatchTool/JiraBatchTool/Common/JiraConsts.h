@@ -124,6 +124,13 @@ public:
     }
 };
 
+//运营需要监控的版本
+struct YYNeedWarningVersion
+{
+    QString sVersionName;  //版本名称
+    QString sVersionId;    //版本Id
+};
+
 //GEH/Jira相关信息
 struct LoginInfo
 {
@@ -149,7 +156,7 @@ typedef std::map<QString, CrashBelongInfo> CrashBelongContainer;
 typedef std::map<QString, JiraModuleInfo> JiraUserModuleContainer;
 typedef std::vector<AutoScriptInfo> AutoScriptContainer;
 typedef std::vector<QString> JiraVersionContainer;
-
+typedef std::vector<YYNeedWarningVersion> JiraWarningVersionContainer;
 
 //智能预警专用
 typedef std::map<QString, std::map<qint64, QString>> JiraAnalysisCrashUsers; //未分析用户设备集合 设备ID-崩溃时间-崩溃描述
@@ -171,13 +178,84 @@ struct JiraProductInfo
 {
     QString sProductKey;   //产品标识
     QString sProductName;  //产品名称
-    QString sProductVersion; //产品标识
+    QString sVersionName;  //产品标识
+    QString sVersionId;    //版本Id
 public:
+    void assign(JiraProductInfo* pProductInfo)
+    {
+        sProductKey = pProductInfo->sProductKey;
+        sProductName = pProductInfo->sProductName;
+        sVersionName = pProductInfo->sVersionName;
+        sVersionId = pProductInfo->sVersionId;
+    }
+
     QString productInfo()
     {
-        return sProductKey + sProductName + sProductVersion;
+        return sProductKey + "__" + sProductName +  "__"  + sVersionName;
     }
 };
+
+
+//////////////////////////////////////////////////////////////////////////
+//智能预警专用
+
+//产品信息
+struct ProductInfo
+{
+    QString sProductKey;   //产品标识
+    QString sProductName;  //产品名称
+};
+
+//Jira信息
+struct JiraInfo
+{
+    QString sUserName;  //域名
+    QString sPassword;  //密码
+    QString sJiraUrl;   //Jira url
+    QString sFilterSql; //过滤语句
+};
+
+//GEH信息
+struct GEHInfo
+{
+    QString sUserName; //域名
+    QString sPassword; //密码
+};
+
+//自动归类信息
+struct AutoBelong
+{
+    int nTimeInterval;  //多久自动计算一次 单位小时h
+};
+
+//邮件内容
+struct EmailContent
+{
+    QString sHeader;    //标题头
+    QString sFSR;  //发送人
+    QString sCSR;  //抄送人
+    QString sSJR;  //收件人
+};
+
+//自动预警信息
+struct AutoWarning
+{
+    int nTimeInterval;  //多久自动计算一次 单位分钟min
+    int nHighCrashMinValue; //高频崩溃预警值
+    QString sWarningUrl; //GEH预警路径
+    QString sHeader;    //标题头
+    QString sFSR;  //发送人
+    QString sCSR;  //抄送人
+    QString sSJR;  //收件人
+};
+
+//默认用户
+struct DefaultUser
+{
+    QString sUser;  //用户名
+    QString sDomain; //域名
+};
+//////////////////////////////////////////////////////////////////////////
 static const QString strModule = "module";
 static const QString strFunction = "function";
 static const QString strVersion = "version";
@@ -208,6 +286,7 @@ static const QString strThreads = "threads";
 static const QString strList = "list";
 static const QString strCrashTime = "crashTime";
 static const QString strDeviceId = "deviceId";
+static const QString strVersionId = "versionId";
 
 //配置文件专用
 static const QString strProductInfo = "ProductInfo";
@@ -234,6 +313,9 @@ static const QString strByStackDll = "ByStackDll";
 static const QString strHighCrashMinValue = "HighCrashMinValue";
 static const QString strBelongInfo = "BelongInfo";
 static const QString strYYProduct = "YYProduct";
+static const QString strNeedWarningVersion = "NeedWarningVersion";
+static const QString strFilterSql = "FilterSql";
+static const QString strSql = "sql";
 
 #define STR_IS_AUTO_TEST QStringLiteral("...自动化：")
 #define SUBMITTERS QStringLiteral("...提交人：")

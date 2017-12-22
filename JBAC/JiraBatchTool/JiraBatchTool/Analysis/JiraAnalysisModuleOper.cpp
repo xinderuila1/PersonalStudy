@@ -5,7 +5,6 @@
 
 #include <QFile>
 #include <QTextStream>
-#include <QCoreApplication>
 
 /*!
 *@brief        ¹¹Ôìº¯Êý 

@@ -14,6 +14,7 @@
 #include <QThread>
 #include <QTimer>
 #include <QDate>
+#include "Common/JiraConsts.h"
 
 class JiraIntelligentWaringOper;
 
@@ -21,7 +22,7 @@ class JiraIntelligentWarningThread: public QThread
 {
     Q_OBJECT
 public:
-    JiraIntelligentWarningThread(QObject *parent = 0);
+    JiraIntelligentWarningThread(JiraProductInfo* pProductInfo, QObject *parent = 0);
     ~JiraIntelligentWarningThread();
 
 protected:
@@ -33,6 +34,7 @@ private slots:
 private:
     QTimer* m_pTimer;
     QDate m_pCurrentDay;
+    int m_nInterval;
     JiraIntelligentWaringOper* m_pIntelligentWaringOper;
 };
 #endif

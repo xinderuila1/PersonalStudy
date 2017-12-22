@@ -22,15 +22,23 @@ import codecs
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-class WarningCrashOper(object):
+#fromAdd = "SUNJJ@grandsoft.com.cn"
+#toAdd = ['HUANGJ-D@glodon.com', 'XIAT@glodon.com', 'ZHAOFH-A@glodon.com', 'wul-b@glodon.com', 'shiqn@glodon.com', 'FANXN@glodon.com', 'wangwj-a@glodon.com']
+#toCC  = ['houj@glodon.com', 'zhuy@glodon.com', 'xiell@glodon.com','SUNJJ@glodon.com', 'ZHANGYC-C@glodon.com', 'ZHANGH-AA@glodon.com', 'YANGWL-A@glodon.com', 'SHENC@glodon.com']
+
+fromAdd = "SUNJJ@grandsoft.com.cn"
+toAdd = ["SUNJJ@grandsoft.com.cn"]  
+toCsr = ["SUNJJ@grandsoft.com.cn"]  
+
+class WarningCrashOper():
     '''
     与GEH交互/自动发邮件
     '''
     
-    __unAnalysisCrashUrl = "http://crash.glodon.com/api/signature/0/%s/crashes?from=%s&to=%s&source=1&s=2000&ver_id=254276&m_ver=254276&search_key=&description=0&bits=0&autotest=0"
+    __unAnalysisCrashUrl = "http://crash.glodon.com/api/signature/0/%s/crashes?from=%s&to=%s&source=1&s=2000&ver_id=%s&m_ver=%s&search_key=&description=0&bits=0&autotest=0"
     
     #登录GEH
-    def __init__(self, username, password):
+    def initialise(self, username, password):
         #保持会话
         cookieJar = cookielib.LWPCookieJar()
         cookie_support = urllib2.HTTPCookieProcessor(cookieJar)
@@ -65,31 +73,37 @@ class WarningCrashOper(object):
         result = urllib2.urlopen(request)       
         
     #未分析异常
-    def downloadUnAnalysisCrash(self, productCode):
+    def downloadUnAnalysisCrash(self, productCode, versonId):
         today = datetime.date.today()
-        searchDay = self.__unAnalysisCrashUrl % (productCode, today, today)
+        searchDay = self.__unAnalysisCrashUrl % (productCode, today, today, versonId, versonId)
         jsonResult = json.loads(urllib2.urlopen(searchDay).read(), 'UTF-8')
         crashJson = json.dumps(jsonResult, ensure_ascii=False, indent=4)
         return crashJson 
     
     #发送邮件
-    def sendEmailToTesters(htmlFile, fromAdd, toAdd, headers):
+    def sendEmailToTesters(self, htmlFile, headers):
         fileObject = open(htmlFile, 'r')
         fileString = fileObject.read()
         fileObject.close()
-        htmlContent = fileString.decode('gbk')           
+        htmlContent = fileString.decode('gbk')   
 
+        strFrom = fromAdd
+        strTo = '; '.join(toAdd)        
+        strCs = '; '.join(toCsr)
+        
+        mail_head = headers + u'版本当天高频次崩溃用户统计'
         mail_host = "exchange.grandsoft.com.cn"  # 设置服务器
-        fromAdd = "SUNJJ@grandsoft.com.cn"
-        toAdd =  ["SUNJJ@grandsoft.com.cn"]  
-    
-        sender = 'SUNJJ@grandsoft.com.cn'
-        receivers = ['SUNJJ@grandsoft.com.cn']   
-    
         message = MIMEText(htmlContent, 'html', 'utf-8')
-        message['Subject'] = Header(headers, 'utf-8')
-        message['From'] = fromAdd
-        message['To'] = '; '.join(toAdd)  
+        message['Subject'] = Header(mail_head, 'utf-8')
+        message['From'] = strFrom
+        message['To'] = strTo
+        message['Cc'] = '; '.join(toAdd) 
         
         smtpObj = smtplib.SMTP(mail_host)
-        smtpObj.sendmail(sender, receivers, message.as_string())
+        smtpObj.sendmail(fromAdd, toAdd, message.as_string())
+        
+#ooo = WarningCrashOper()
+#ooo.sendEmailToTesters('G:/JiraBatchTool/PersonalStudy/JBAC/JiraBatchTool/Win32/Debug/htmlFile/gtj2017YY_User_Product1.0.9.0.html', 'gtj2017YY_User_Product1.0.9.0')
+#print 'hello'
+
+    

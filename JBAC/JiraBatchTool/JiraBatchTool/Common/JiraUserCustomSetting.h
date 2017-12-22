@@ -14,13 +14,6 @@
 #include <QString>
 
 class QXmlStreamReader;
-struct ProductInfo;
-struct JiraInfo;
-struct GEHInfo;
-struct AutoBelong;
-struct EmailContent;
-struct AutoWarning;
-struct DefaultUser;
 
 class JiraUserCustomSetting
 {
@@ -28,11 +21,20 @@ public:
     static JiraUserCustomSetting* instance();
     ~JiraUserCustomSetting();
 
+    std::shared_ptr<ProductInfo> productInfo();
+    std::shared_ptr<JiraInfo> jiraInfo();
+    std::shared_ptr<GEHInfo> gehInfo();
+
     std::shared_ptr<CrashBelongContainer> belongContainerByScript();
     std::shared_ptr<JiraDllContainer> belongContainerByDll();
 
     std::shared_ptr<JiraVersionContainer> yyVersionContainer();
     std::shared_ptr<JiraUserModuleContainer> yyUserModuleContainer();
+
+    std::shared_ptr<AutoWarning> autoWarning();
+    std::shared_ptr<AutoBelong> autoBelong();
+    std::shared_ptr<JiraWarningVersionContainer> warningVersionContainer();
+
 private:
     JiraUserCustomSetting();
     void initUserCustomSetting();
@@ -54,6 +56,7 @@ private:
     void loadYYProductInfo();
     void loadYYModuleInfo();
     void loadYYVersionInfo();
+    void loadWarningVersionInfo();
 
     QString moduleId(const QString& sKey);
 private:
@@ -75,61 +78,7 @@ private:
 
     std::shared_ptr<JiraVersionContainer> m_pYYVersionContainer;
     std::shared_ptr<JiraUserModuleContainer> m_pYYUserModuleContainer;
+    std::shared_ptr<JiraWarningVersionContainer> m_pWarningVersionContainer;
 };
 
-//产品信息
-struct ProductInfo
-{
-    QString sProductKey;   //产品标识
-    QString sProductName;  //产品名称
-};
-
-//Jira信息
-struct JiraInfo
-{
-    QString sUserName;  //域名
-    QString sPassword;  //密码
-    QString sJiraUrl;   //Jira url
-};
-
-//GEH信息
-struct GEHInfo
-{
-    QString sUserName; //域名
-    QString sPassword; //密码
-};
-
-//自动归类信息
-struct AutoBelong
-{
-    int nTimeInterval;  //多久自动计算一次 单位小时h
-};
-
-//邮件内容
-struct EmailContent
-{
-    QString sHeader;    //标题头
-    QString sFSR;  //发送人
-    QString sCSR;  //抄送人
-    QString sSJR;  //收件人
-};
-
-//自动预警信息
-struct AutoWarning
-{
-    int nTimeInterval;  //多久自动计算一次 单位分钟min
-    int nHighCrashMinValue; //高频崩溃预警值
-    QString sWarningUrl; //GEH预警路径
-    QString sHeader;    //标题头
-    QString sFSR;  //发送人
-    QString sCSR;  //抄送人
-    QString sSJR;  //收件人
-};
-
-//默认用户
-struct DefaultUser
-{
-    QString sUser;  //用户名
-    QString sDomain; //域名
-};
 #endif

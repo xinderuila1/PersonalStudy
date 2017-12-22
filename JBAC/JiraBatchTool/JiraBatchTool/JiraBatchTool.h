@@ -19,9 +19,13 @@ private slots:
     void showLogInfo();
 
 private:
+    
     void initUI();
     void initConnect();
 
+    void initUIForm();
+    void initAutoWarningOper();
+    void initAutoBelongOper();
 private:
 
     QPushButton *m_pAnalysisBtn, *m_pShowLogInfo;

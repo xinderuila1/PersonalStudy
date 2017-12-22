@@ -13,17 +13,23 @@
 #include <Python.h>  
 #include <QString>
 
+#include "Common/JiraConsts.h"
+
 class JiraIntelligentWaringPython
 {
 public:
     JiraIntelligentWaringPython();
     ~JiraIntelligentWaringPython();
 
-    QString downloadUnAnalysisCrash();
-    bool sendEmailToTesters(const QString& sEmailContent);
+    void LoginPlatform(LoginInfo* pLogInfo);
+    QString downloadUnAnalysisCrash(JiraProductInfo* pProductInfo);
+    void sendEmailToTesters(const QString& sHtmlPath, const QString& sHeader);
 
 private:
     PyObject *m_pModule;
+    PyObject *m_pWarningClass; 
+    PyObject *m_pWarningOper;  
+    PyObject *m_pInitialiseMethod;
 };
 
 #endif

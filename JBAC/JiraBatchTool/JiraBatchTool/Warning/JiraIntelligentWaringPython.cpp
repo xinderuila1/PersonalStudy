@@ -8,7 +8,9 @@ JiraIntelligentWaringPython::JiraIntelligentWaringPython()
 {
     Py_Initialize();
 
-    m_pModule = PyImport_ImportModule("IntelligentWaring");
+    m_pModule = PyImport_ImportModule("WarningCrashOper");
+    m_pWarningClass = PyObject_GetAttrString(m_pModule, "WarningCrashOper");
+    m_pWarningOper = PyInstance_New(m_pWarningClass, NULL, NULL);
 }
 
 /*!
@@ -17,6 +19,10 @@ JiraIntelligentWaringPython::JiraIntelligentWaringPython()
 */
 JiraIntelligentWaringPython::~JiraIntelligentWaringPython()
 {
+    Py_DECREF(m_pInitialiseMethod);
+    Py_DECREF(m_pWarningOper);
+    Py_DECREF(m_pWarningClass); 
+
     Py_Finalize();
 }
 
@@ -24,15 +30,15 @@ JiraIntelligentWaringPython::~JiraIntelligentWaringPython()
 *@brief        下载未分析的Crash 
 *@author       sunjj 2017年12月11日
 */
-QString JiraIntelligentWaringPython::downloadUnAnalysisCrash()
+QString JiraIntelligentWaringPython::downloadUnAnalysisCrash(JiraProductInfo* pProductInfo)
 {
-    char* pFile;
-    PyObject *pFunction = PyObject_GetAttrString(m_pModule, "downloadUnAnalysisCrash");
-    PyObject *pReturn = PyEval_CallObject(pFunction, nullptr); 
-    PyArg_Parse(pReturn, "s", &pFile);
-    QString sResult(pFile);
+    char* pResult;
+    PyObject *pReturn = PyObject_CallMethod(m_pWarningOper, "downloadUnAnalysisCrash", "ss", 
+        pProductInfo->sProductKey.toStdString().c_str(), 
+        pProductInfo->sVersionId.toStdString().c_str());
+    PyArg_Parse(pReturn, "s", &pResult);
+    QString sResult(pResult);
     Py_DECREF(pReturn);
-    Py_DECREF(pFunction);
     return sResult;
 }
 
@@ -41,14 +47,23 @@ QString JiraIntelligentWaringPython::downloadUnAnalysisCrash()
 *@author       sunjj 2017年12月11日
 *@return       bool
 */
-bool JiraIntelligentWaringPython::sendEmailToTesters(const QString& sEmailContent)
+void JiraIntelligentWaringPython::sendEmailToTesters(const QString& sHtmlPath, const QString& sHeader)
 {
-    PyObject *pArgs = Py_BuildValue("(s)", sEmailContent.toStdString().c_str()); 
-    PyObject *pFunction = PyObject_GetAttrString(m_pModule, "sendEmailToTesters");
-    PyObject *pReturn = PyEval_CallObject(pFunction, pArgs); 
+    PyObject *pReturn = PyObject_CallMethod(m_pWarningOper, "sendEmailToTesters", "ss",
+        sHtmlPath.toStdString().c_str(),
+        sHeader.toStdString().c_str());
     Py_DECREF(pReturn);
-    Py_DECREF(pFunction);
-    Py_DECREF(pArgs);
-    return pReturn != nullptr;
+}
+
+/*!
+*@brief        登录异常捕获平台 
+*@author       sunjj 2017年12月22日
+*@param[in]    LoginInfo* pLogInfo
+*/
+void JiraIntelligentWaringPython::LoginPlatform(LoginInfo* pLogInfo)
+{
+    m_pInitialiseMethod = PyObject_CallMethod(m_pWarningOper, "initialise", "ss", 
+        pLogInfo->sUserName.toStdString().c_str(), 
+        pLogInfo->sPassword.toStdString().c_str());
 }
 

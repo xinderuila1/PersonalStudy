@@ -3,10 +3,8 @@
 #include "Common/JiraUserCustomSetting.h"
 #include <assert.h>
 
-#include <QXmlStreamReader>
 #include <QFile>
 #include <QTextStream>
-#include <QCoreApplication>
 #include <QRegExp>
 
 #include <QJsonObject>

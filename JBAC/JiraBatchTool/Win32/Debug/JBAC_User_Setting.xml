@@ -6,7 +6,7 @@
 		<!-- 产品标识 -->
 		<ProductKey>gtj2017</ProductKey>
 		<!-- 产品名称 -->
-		<ProductName>云计量土建</ProductName>
+		<ProductName>YYProduct</ProductName>
 	</ProductInfo>
 	
 	<!-- Jira信息 -->
@@ -17,6 +17,7 @@
 		<UserPassword>52zhaodan!</UserPassword>
 		<!-- 产品JiraURL -->
 		<JiraUrl>http://pm.glodon.com/newjira/</JiraUrl>
+		<FilterSql sql = "project = GTJTJ AND issuetype = Crash AND 测试版本号 ~ 1.0.9.0"/>
 	</JiraInfo>
 	
 	<!-- GEH信息 -->
@@ -39,8 +40,11 @@
 		<TimeInterval>5</TimeInterval>
 		<!-- 高频次崩溃预警值 -->
 		<HighCrashMinValue>3</HighCrashMinValue>
-		<!-- 预警地址 -->
-		<WarningUrl></WarningUrl>
+		<!-- 需要监控的版本 -->
+		<NeedWarningVersion>
+			<version name = "1.0.9.0" versionId = "254276"></version>
+			<version name = "1.0.10.0" versionId = "255412"></version>
+		</NeedWarningVersion>
 		<!-- 邮件标题 -->
 		<Header>版本当天高频次崩溃用户统计</Header>
 		<!-- 发送人 -->

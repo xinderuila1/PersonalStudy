@@ -39,6 +39,7 @@ JiraUserCustomSetting::JiraUserCustomSetting()
     m_pBelongContainerByDll = std::make_shared<JiraDllContainer>();
     m_pYYVersionContainer = std::make_shared<JiraVersionContainer>();
     m_pYYUserModuleContainer = std::make_shared<JiraUserModuleContainer>();
+    m_pWarningVersionContainer = std::make_shared<JiraWarningVersionContainer>();
 
     m_pXMLReader = new QXmlStreamReader;
     initUserCustomSetting();
@@ -149,7 +150,11 @@ void JiraUserCustomSetting::loadJiraInfo()
         }
         else if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strJiraUrl)
         {
-            m_pJiraInfo->sJiraUrl =  m_pXMLReader->readElementText();
+            m_pJiraInfo->sJiraUrl = m_pXMLReader->readElementText();
+        }
+        else if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strFilterSql)
+        {
+            m_pJiraInfo->sFilterSql = m_pXMLReader->attributes().value(strSql).toString();
         }
         m_pXMLReader->readNext();
     }
@@ -207,10 +212,6 @@ void JiraUserCustomSetting::loadAutoWarningInfo()
         {
             m_pAutoWarning->nHighCrashMinValue = m_pXMLReader->readElementText().toInt();
         }
-        else if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strWarningUrl)
-        {
-            m_pAutoWarning->sWarningUrl = m_pXMLReader->readElementText();
-        }
         else if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strHeader)
         {
             m_pAutoWarning->sHeader = m_pXMLReader->readElementText();
@@ -226,6 +227,10 @@ void JiraUserCustomSetting::loadAutoWarningInfo()
         else if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strSJR)
         {
             m_pAutoWarning->sSJR = m_pXMLReader->readElementText();
+        }
+        else if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strNeedWarningVersion)
+        {
+            loadWarningVersionInfo();
         }
         m_pXMLReader->readNext();
     }
@@ -457,6 +462,26 @@ void JiraUserCustomSetting::loadYYVersionInfo()
 }
 
 /*!
+*@brief        需要监控版本信息 
+*@author       sunjj 2017年12月22日
+*/
+void JiraUserCustomSetting::loadWarningVersionInfo()
+{
+    while (!(m_pXMLReader->isEndElement() && m_pXMLReader->name() == strNeedWarningVersion))
+    {
+        if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strVersion)
+        {
+            YYNeedWarningVersion oWarningVersion;
+            oWarningVersion.sVersionName = m_pXMLReader->attributes().value(strName).toString();
+            oWarningVersion.sVersionId = m_pXMLReader->attributes().value(strVersionId).toString();
+            m_pWarningVersionContainer->push_back(oWarningVersion);
+        }
+        m_pXMLReader->readNext();
+    }
+}
+
+
+/*!
 *@brief        根据脚本划分归属团队容器 
 *@author       sunjj 2017年12月22日
 *@return       std::shared_ptr<CrashBelongContainer>
@@ -494,4 +519,64 @@ std::shared_ptr<JiraVersionContainer> JiraUserCustomSetting::yyVersionContainer(
 std::shared_ptr<JiraUserModuleContainer> JiraUserCustomSetting::yyUserModuleContainer()
 {
     return m_pYYUserModuleContainer;
+}
+
+/*!
+*@brief        Jira信息 
+*@author       sunjj 2017年12月22日
+*@return       std::shared_ptr<JiraInfo>
+*/
+std::shared_ptr<JiraInfo> JiraUserCustomSetting::jiraInfo()
+{
+    return m_pJiraInfo;
+}
+
+/*!
+*@brief        geh信息 
+*@author       sunjj 2017年12月22日
+*@return       std::shared_ptr<GEHInfo>
+*/
+std::shared_ptr<GEHInfo> JiraUserCustomSetting::gehInfo()
+{
+    return m_pGEHInfo;
+}
+
+/*!
+*@brief        产品信息 
+*@author       sunjj 2017年12月22日
+*@return       std::shared_ptr<ProductInfo>
+*/
+std::shared_ptr<ProductInfo> JiraUserCustomSetting::productInfo()
+{
+    return m_pProductInfo;
+}
+
+/*!
+*@brief        自动预警设置 
+*@author       sunjj 2017年12月22日
+*@return       std::shared_ptr<AutoWarning>
+*/
+std::shared_ptr<AutoWarning> JiraUserCustomSetting::autoWarning()
+{
+    return m_pAutoWarning;
+}
+
+/*!
+*@brief        需要监控的运营版本 
+*@author       sunjj 2017年12月22日
+*@return       std::shared_ptr<JiraWarningVersionContainer>
+*/
+std::shared_ptr<JiraWarningVersionContainer> JiraUserCustomSetting::warningVersionContainer()
+{
+    return m_pWarningVersionContainer;
+}
+
+/*!
+*@brief        自动归类 
+*@author       sunjj 2017年12月22日
+*@return       std::shared_ptr<AutoBelong>
+*/
+std::shared_ptr<AutoBelong> JiraUserCustomSetting::autoBelong()
+{
+    return m_pAutoBelong;
 }

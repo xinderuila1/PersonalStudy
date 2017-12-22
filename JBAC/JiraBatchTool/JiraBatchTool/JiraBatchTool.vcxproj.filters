@@ -110,6 +110,15 @@
     <ClCompile Include="Common\JiraUserCustomSetting.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="Analysis\JiraAnalysisCrashThread.cpp">
+      <Filter>Source Files\Analysis</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_JiraAnalysisCrashThread.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_JiraAnalysisCrashThread.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="JiraBatchTool.qrc">
@@ -120,6 +129,9 @@
     </CustomBuild>
     <CustomBuild Include="Warning\JiraIntelligentWaringThread.h">
       <Filter>Header Files\Warning</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Analysis\JiraAnalysisCrashThread.h">
+      <Filter>Header Files\Analysis</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

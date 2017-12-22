@@ -20,7 +20,7 @@ class JiraIntelligentWaringPython;
 class JiraIntelligentWaringOper
 {
 public:
-    JiraIntelligentWaringOper();
+    JiraIntelligentWaringOper(JiraProductInfo* pProductInfo);
     ~JiraIntelligentWaringOper();
 
     void analysisCurDayCrash(bool bClear);
@@ -34,12 +34,15 @@ private:
     void analysisCurrentCrash();
     void sendEmailToTesters();
 
+    void logingGehPlatForm();
+    QString htmlFilePath();
 private:
     JiraIntelligentWaringPython* m_pIntelligentWaringPython;
     JiraAnalysisCrashUsers* m_pUnAnalysisCrashUsers; //未分析用户
     JiraAnalysisCrashUsers* m_pAnalysisedCrashUsers; //已分析用户
     JiraHighCrashUsers* m_pHighCrashUsers;
     JiraHighCrashCount* m_pHighCrashCount;
+    JiraProductInfo* m_pProductInfo;
     QString m_sUnAnalysisCrash;
 };
 
