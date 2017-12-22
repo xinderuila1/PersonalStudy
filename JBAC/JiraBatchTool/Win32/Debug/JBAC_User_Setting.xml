@@ -12,20 +12,20 @@
 	<!-- Jira信息 -->
 	<JiraInfo>
 		<!-- 域账号 -->
-		<UserName>sunjj</UserName>
+		<UserName></UserName>
 		<!-- 域密码 -->
-		<UserPassword>52zhaodan!</UserPassword>
+		<UserPassword></UserPassword>
 		<!-- 产品JiraURL -->
 		<JiraUrl>http://pm.glodon.com/newjira/</JiraUrl>
-		<FilterSql sql = "project = GTJTJ AND issuetype = Crash AND 测试版本号 ~ 1.0.9.0"/>
+		<FilterSql sql = "project = GTJTJ AND resolution = Unresolved"/>
 	</JiraInfo>
 	
 	<!-- GEH信息 -->
 	<GEHInfo>
 		<!-- 域账号 -->
-		<UserName>sunjj</UserName>
+		<UserName></UserName>
 		<!-- 域密码 -->
-		<UserPassword>52zhaodan!</UserPassword>
+		<UserPassword></UserPassword>
 	</GEHInfo>
 	
 	<!-- 自动归类 -->
@@ -45,14 +45,6 @@
 			<version name = "1.0.9.0" versionId = "254276"></version>
 			<version name = "1.0.10.0" versionId = "255412"></version>
 		</NeedWarningVersion>
-		<!-- 邮件标题 -->
-		<Header>版本当天高频次崩溃用户统计</Header>
-		<!-- 发送人 -->
-		<FSR>SUNJJ@grandsoft.com.cn</FSR>
-		<!-- 抄送人 -->
-		<CSR>xiell@grandsoft.com.cn</CSR>
-		<!-- 收件人 -->
-		<SJR>SUNJJ@grandsoft.com.cn</SJR>
 	</AutoWarning>
 	
 	<!-- 项目划分 -->
