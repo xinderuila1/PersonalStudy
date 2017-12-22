@@ -18,7 +18,7 @@
 //htmlÎÄ¼þ ²âÊÔÓÃ
 QString htmlFilePath()
 {
-    QString sProductInfo = "GTJ2017" + "_" + "1.0.9.0";
+    QString sProductInfo = "GTJ2017";
     QString sResult = qApp->applicationDirPath() + "//htmlFile//" + sProductInfo + ".html";
     if (QFile::exists(sResult))
         QFile::remove(sResult);

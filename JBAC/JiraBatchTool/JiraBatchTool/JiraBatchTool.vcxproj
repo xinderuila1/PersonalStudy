@@ -84,6 +84,7 @@
     <ClCompile Include="Analysis\JiraAnalysisVersionOper.cpp" />
     <ClCompile Include="Analysis\JiraBatchCrashInfoOper.cpp" />
     <ClCompile Include="Analysis\JiraAnalysisPythonOper.cpp" />
+    <ClCompile Include="Common\JiraUserCustomSetting.cpp" />
     <ClCompile Include="Common\TestCommon.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_JiraBatchTool.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -130,6 +131,7 @@
     <ClInclude Include="Analysis\JiraBatchCrashInfoOper.h" />
     <ClInclude Include="analysis\JiraAnalysisPythonOper.h" />
     <ClInclude Include="Common\JiraConsts.h" />
+    <ClInclude Include="Common\JiraUserCustomSetting.h" />
     <ClInclude Include="Common\TestCommon.h" />
     <ClInclude Include="Warning\JiraIntelligentWaringOper.h" />
     <ClInclude Include="Warning\JiraIntelligentWaringOutputHtml.h" />

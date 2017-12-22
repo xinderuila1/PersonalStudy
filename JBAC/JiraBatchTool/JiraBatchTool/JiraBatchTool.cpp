@@ -23,10 +23,13 @@ static const QString sHintInfo = QStringLiteral("核心功能：自动分析Crash所属团队
 static const QString sDefaultJql = QStringLiteral("project in (GTJTJ) AND issuetype = Crash AND status in (打开的, 进行中) AND 问题归属= NULL");
 
 #include "Warning/JiraIntelligentWaringOutputHtml.h"
+#include "Common/JiraUserCustomSetting.h"
 
 JiraBatchTool::JiraBatchTool(QWidget *parent)
     : QDialog(parent)
 {
+    JiraUserCustomSetting::instance();
+
     JiraWarningCrashContainer oContainer;
     JiraWarningCrashInfo oCrashInfo;
     oCrashInfo.sDeviceID = "4b6ab0c4-2a89-47cd-a806-a54f6f9e53f9";

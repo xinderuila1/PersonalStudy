@@ -209,6 +209,32 @@ static const QString strList = "list";
 static const QString strCrashTime = "crashTime";
 static const QString strDeviceId = "deviceId";
 
+//配置文件专用
+static const QString strProductInfo = "ProductInfo";
+static const QString strProductKey = "ProductKey";
+static const QString strProductName = "ProductName";
+static const QString strJiraInfo = "JiraInfo";
+static const QString strUserName = "UserName";
+static const QString strUserPassword = "UserPassword";
+static const QString strJiraUrl = "JiraUrl";
+static const QString strGEHInfo = "GEHInfo";
+static const QString strAutoBelong = "AutoBelong";
+static const QString strTimeInterval = "TimeInterval";
+static const QString strAutoWarning = "AutoWarning";
+static const QString strWarningUrl = "WarningUrl";
+static const QString strEmailContent = "EmailContent";
+static const QString strHeader = "Header";
+static const QString strFSR = "FSR";
+static const QString strCSR = "CSR";
+static const QString strSJR = "SJR";
+static const QString strDefaultBelong = "DefaultBelong";
+static const QString strCrashBelongRule = "CrashBelongRule";
+static const QString strByAutoScript = "ByAutoScript";
+static const QString strByStackDll = "ByStackDll";
+static const QString strHighCrashMinValue = "HighCrashMinValue";
+static const QString strBelongInfo = "BelongInfo";
+static const QString strYYProduct = "YYProduct";
+
 #define STR_IS_AUTO_TEST QStringLiteral("...自动化：")
 #define SUBMITTERS QStringLiteral("...提交人：")
 #define DETAILINFO QStringLiteral("...描述：")

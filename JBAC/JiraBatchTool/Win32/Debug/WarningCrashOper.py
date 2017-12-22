@@ -73,7 +73,12 @@ class WarningCrashOper(object):
         return crashJson 
     
     #发送邮件
-    def sendEmailToTesters(sEmailContent, fromAdd, toAdd, contents):
+    def sendEmailToTesters(htmlFile, fromAdd, toAdd, headers):
+        fileObject = open(htmlFile, 'r')
+        fileString = fileObject.read()
+        fileObject.close()
+        htmlContent = fileString.decode('gbk')           
+
         mail_host = "exchange.grandsoft.com.cn"  # 设置服务器
         fromAdd = "SUNJJ@grandsoft.com.cn"
         toAdd =  ["SUNJJ@grandsoft.com.cn"]  
@@ -81,8 +86,8 @@ class WarningCrashOper(object):
         sender = 'SUNJJ@grandsoft.com.cn'
         receivers = ['SUNJJ@grandsoft.com.cn']   
     
-        message = MIMEText(sEmailContent, 'plain', 'utf-8')
-        message['Subject'] = Header('GTJ2018土建云计量9.0版本当天高频次崩溃用户统计', 'utf-8')
+        message = MIMEText(htmlContent, 'html', 'utf-8')
+        message['Subject'] = Header(headers, 'utf-8')
         message['From'] = fromAdd
         message['To'] = '; '.join(toAdd)  
         

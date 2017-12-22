@@ -15,7 +15,6 @@
 #include <QStringList>
 #include "Common/JiraConsts.h"
 
-class QXmlStreamReader;
 class JiraAnalysisDumpListOper;
 
 class JiraAnalysisModuleOper
@@ -32,17 +31,10 @@ private:
 
     void parseCrashInfo();
     void loadCrashInfo();
-
-    void loadDllInfo();
-    void loadModuleInfo();
-    void loadFuncInfo(JiraModuleInfo& oModuleInfo);
-    void loadDetailInfo(JiraDllInfo& oDllInfo);
-
 private:
     QStringList *m_pCrashInfoList;
-    QXmlStreamReader *m_pXMLReader;
-    JiraDllContainer *m_pDllContainer;
     CrashUpdateInfo *m_pCrashUpdateInfo;
     JiraAnalysisDumpListOper* m_pAnalysisDumpListOper;
+    std::shared_ptr<JiraDllContainer> m_pDllContainer;
 };
 #endif

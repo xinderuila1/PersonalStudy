@@ -1,5 +1,6 @@
 #include "JiraAnalysisBelongOper.h"
 #include "JiraAnalysisDumpListOper.h"
+#include "Common/JiraUserCustomSetting.h"
 #include <assert.h>
 
 #include <QXmlStreamReader>
@@ -17,12 +18,10 @@
 *@author       sunjj 2017年4月17日
 */
 JiraAnalysisBelongOper::JiraAnalysisBelongOper(JiraAnalysisDumpListOper* pAnalysisDumpListOper)
-    :m_pXMLReader(nullptr), m_pCrashUpdateInfo(nullptr), m_pCrashBelongContainer(nullptr), m_pAnalysisDumpListOper(pAnalysisDumpListOper)
+    : m_pCrashUpdateInfo(nullptr), m_pCrashBelongContainer(nullptr), m_pAnalysisDumpListOper(pAnalysisDumpListOper)
 {
-    m_pXMLReader = new QXmlStreamReader;
-    m_pCrashBelongContainer = new CrashBelongContainer;
+    m_pCrashBelongContainer = JiraUserCustomSetting::instance()->belongContainerByScript();
     m_pCrashUpdateInfo = new CrashUpdateInfo;
-    loadCrashBelongInfo();
 }
 
 /*!
@@ -33,14 +32,8 @@ JiraAnalysisBelongOper::~JiraAnalysisBelongOper()
 {
     m_pAnalysisDumpListOper = nullptr;
 
-    delete m_pXMLReader;
-    m_pXMLReader = nullptr;
-
     delete m_pCrashUpdateInfo;
     m_pCrashUpdateInfo = nullptr;
-
-    delete m_pCrashBelongContainer;
-    m_pCrashBelongContainer = nullptr;
 }
 
 /*!
@@ -109,39 +102,4 @@ void JiraAnalysisBelongOper::parseCrashInfo()
     m_pCrashUpdateInfo->sHighFrequency = m_pAnalysisDumpListOper->highFrequency();
     m_pCrashUpdateInfo->sStackInfo = m_pAnalysisDumpListOper->stackInfo();
     m_pCrashUpdateInfo->sCrashCount = m_pAnalysisDumpListOper->crashCount();
-}
-
-/*!
-*@brief        加载Crash归属团队原则 
-*@author       sunjj 2017年4月17日
-*@return       void
-*/
-void JiraAnalysisBelongOper::loadCrashBelongInfo()
-{
-    QString sDllInfo = qApp->applicationDirPath()  + "/CrashBelongInfo.xml";
-
-    QFile oFile(sDllInfo);
-    if (!oFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        assert(false);
-        return;
-    }
-
-    m_pXMLReader->setDevice(&oFile);
-    m_pXMLReader->readNext();
-
-    while (!m_pXMLReader->atEnd())
-    {
-        if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strModule)
-        { 
-            CrashBelongInfo oBelongInfo;
-            oBelongInfo.sIdentification = m_pXMLReader->attributes().value(strIdentification).toString();
-            oBelongInfo.sModuleName = m_pXMLReader->attributes().value(strName).toString();
-            oBelongInfo.sAuthor = m_pXMLReader->attributes().value(strAuthor).toString();
-            oBelongInfo.sDomain = m_pXMLReader->attributes().value(strDomain).toString();
-            oBelongInfo.sModuleID = m_pXMLReader->attributes().value(strModuleID).toString();
-            m_pCrashBelongContainer->insert(std::make_pair(oBelongInfo.sIdentification, oBelongInfo));
-        }
-        m_pXMLReader->readNext();
-    }
 }

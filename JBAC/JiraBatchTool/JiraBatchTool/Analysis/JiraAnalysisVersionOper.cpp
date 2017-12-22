@@ -1,7 +1,7 @@
 #include "JiraAnalysisVersionOper.h"
+#include "Common/JiraUserCustomSetting.h"
 #include <assert.h>
 
-#include <QXmlStreamReader>
 #include <QFile>
 #include <QRegExp>
 #include <QTextStream>
@@ -12,13 +12,11 @@
 *@author       sunjj 2017年8月1日
 */
 JiraAnalysisVersionOper::JiraAnalysisVersionOper()
-    :m_pCrashUpdateInfo(nullptr), m_pVersionContainer(nullptr), m_pXMLReader(nullptr), m_pUserModuleContainer(nullptr)
+    :m_pCrashUpdateInfo(nullptr), m_pVersionContainer(nullptr), m_pUserModuleContainer(nullptr)
 {
-    m_pXMLReader = new QXmlStreamReader;
     m_pCrashUpdateInfo = new CrashUpdateInfo;
-    m_pVersionContainer = new JiraVersionContainer;
-    m_pUserModuleContainer = new JiraUserModuleContainer;
-    loadModuleUser();
+    m_pVersionContainer = JiraUserCustomSetting::instance()->yyVersionContainer();
+    m_pUserModuleContainer = JiraUserCustomSetting::instance()->yyUserModuleContainer();
 }
 
 /*!
@@ -27,17 +25,8 @@ JiraAnalysisVersionOper::JiraAnalysisVersionOper()
 */
 JiraAnalysisVersionOper::~JiraAnalysisVersionOper()
 {
-    delete m_pUserModuleContainer;
-    m_pUserModuleContainer = nullptr;
-
-    delete m_pVersionContainer;
-    m_pVersionContainer = nullptr;
-
     delete m_pCrashUpdateInfo;
     m_pCrashUpdateInfo = nullptr;
-
-    delete m_pXMLReader;
-    m_pXMLReader = nullptr;
 }
 
 /*!
@@ -130,75 +119,5 @@ void JiraAnalysisVersionOper::parseVersion(const QString& sVersion, const QStrin
             m_pCrashUpdateInfo->sDomain = "sunjj";
             m_pCrashUpdateInfo->sModuleID = "11125";
         }
-    }
-}
-
-/*!
-*@brief        加载模块用户 
-*@author       sunjj 2017年8月16日
-*/
-void JiraAnalysisVersionOper::loadModuleUser()
-{
-    QString sDllInfo = qApp->applicationDirPath()  + "/YYCustomVersion.xml";
-
-    QFile oFile(sDllInfo);
-    if (!oFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        assert(false);
-        return;
-    }
-
-    m_pXMLReader->setDevice(&oFile);
-    m_pXMLReader->readNext();
-
-    while (!m_pXMLReader->atEnd())
-    {
-        if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strModule)
-        {
-            loadModuleInfo();
-        }
-        else if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strProduct)
-        {
-            loadVersionInfo();
-        }
-        m_pXMLReader->readNext();
-    }
-}
-
-/*!
-*@brief        加载模块信息 
-*@author       sunjj 2017年8月1日
-*/
-void JiraAnalysisVersionOper::loadModuleInfo()
-{
-    while (!(m_pXMLReader->isEndElement() && m_pXMLReader->name() == strModule))
-    {
-        if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strUser)
-        {
-            JiraModuleInfo oModuleInfo;
-            oModuleInfo.sModuleName = m_pXMLReader->attributes().value(strName).toString();
-            oModuleInfo.sAuthor = m_pXMLReader->attributes().value(strAuthor).toString();
-            oModuleInfo.sDomain = m_pXMLReader->attributes().value(strDomain).toString();
-            oModuleInfo.sModuleID = m_pXMLReader->attributes().value(strModuleID).toString();
-            m_pUserModuleContainer->insert(std::make_pair(oModuleInfo.sModuleID, oModuleInfo));
-        }
-        m_pXMLReader->readNext();
-    }
-}
-
-/*!
-*@brief        加载版本信息 
-*@author       sunjj 2017年8月16日
-*/
-void JiraAnalysisVersionOper::loadVersionInfo()
-{
-    while (!(m_pXMLReader->isEndElement() && m_pXMLReader->name() == strProduct))
-    {
-        if (m_pXMLReader->isStartElement() && m_pXMLReader->name() == strVersion)
-        {
-            QString sProductVersion = m_pXMLReader->readElementText();
-            m_pVersionContainer->push_back(sProductVersion);
-        }
-        m_pXMLReader->readNext();
     }
 }

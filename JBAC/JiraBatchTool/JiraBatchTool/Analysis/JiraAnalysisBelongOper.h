@@ -12,7 +12,6 @@
 */
 #include "Common/JiraConsts.h"
 
-class QXmlStreamReader;
 class JiraAnalysisDumpListOper;
 
 class JiraAnalysisBelongOper
@@ -28,12 +27,10 @@ private:
     void afterParse();
 
     void parseCrashInfo();
-    void loadCrashBelongInfo();
 
 private:
-    QXmlStreamReader *m_pXMLReader;
     CrashUpdateInfo* m_pCrashUpdateInfo;
-    CrashBelongContainer *m_pCrashBelongContainer;
+    std::shared_ptr<CrashBelongContainer> m_pCrashBelongContainer;
     JiraAnalysisDumpListOper* m_pAnalysisDumpListOper;
 };
 #endif

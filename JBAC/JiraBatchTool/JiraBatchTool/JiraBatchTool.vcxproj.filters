@@ -107,6 +107,9 @@
     <ClCompile Include="Warning\JiraIntelligentWaringOutputHtml.cpp">
       <Filter>Source Files\Warning</Filter>
     </ClCompile>
+    <ClCompile Include="Common\JiraUserCustomSetting.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="JiraBatchTool.qrc">
@@ -152,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="Warning\JiraIntelligentWaringOutputHtml.h">
       <Filter>Header Files\Warning</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\JiraUserCustomSetting.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
