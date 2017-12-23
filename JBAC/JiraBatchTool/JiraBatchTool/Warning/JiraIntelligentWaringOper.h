@@ -39,7 +39,6 @@ private:
 
     JiraCrashRate todayCrashRateInfo();
     JiraCrashRate totalCrashRateInfo();
-
     JiraCrashRate calcCrashRateInfo(bool bToday);
 
 private:
