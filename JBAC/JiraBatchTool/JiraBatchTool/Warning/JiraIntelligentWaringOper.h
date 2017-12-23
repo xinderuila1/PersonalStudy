@@ -36,6 +36,12 @@ private:
 
     void logingGehPlatForm();
     QString htmlFilePath();
+
+    JiraCrashRate todayCrashRateInfo();
+    JiraCrashRate totalCrashRateInfo();
+
+    JiraCrashRate calcCrashRateInfo(bool bToday);
+
 private:
     JiraIntelligentWaringPython* m_pIntelligentWaringPython;
     JiraAnalysisCrashUsers* m_pUnAnalysisCrashUsers; //Œ¥∑÷Œˆ”√ªß

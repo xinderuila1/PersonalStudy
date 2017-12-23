@@ -25,6 +25,9 @@ public:
     QString downloadUnAnalysisCrash(JiraProductInfo* pProductInfo);
     void sendEmailToTesters(const QString& sHtmlPath, const QString& sHeader);
 
+    QString versionBasicInfo(JiraProductInfo* pProductInfo, bool bCurday);
+    QString versionCrashInfo(JiraProductInfo* pProductInfo, bool bCurday);
+
 private:
     PyObject *m_pModule;
     PyObject *m_pWarningClass; 

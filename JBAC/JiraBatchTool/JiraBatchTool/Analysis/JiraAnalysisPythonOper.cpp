@@ -24,9 +24,9 @@ JiraAnalysisPythonOper::JiraAnalysisPythonOper():m_pSearchResult(nullptr), m_pLo
 */
 JiraAnalysisPythonOper::~JiraAnalysisPythonOper()
 {
-    Py_DECREF(m_pInitialiseMethod);
-    Py_DECREF(m_pAnalysisOper);
-    Py_DECREF(m_pAnalysisClass); 
+    FreeAndNilPyObject(m_pInitialiseMethod);
+    FreeAndNilPyObject(m_pAnalysisOper);
+    FreeAndNilPyObject(m_pAnalysisClass); 
 
     delete m_pSearchResult;
     m_pSearchResult = nullptr;
@@ -67,7 +67,7 @@ JiraCrashKeyContainer* JiraAnalysisPythonOper::searchCrashInfo(const QString& sS
         QString sCrashInfo = PyString_AsString(pValue);
         m_pSearchResult->insert(std::make_pair(sCrashKey, sCrashInfo));
     }  
-    Py_DECREF(pReturn);
+    FreeAndNilPyObject(pReturn);
     return m_pSearchResult;
 }
 
@@ -79,7 +79,7 @@ JiraCrashKeyContainer* JiraAnalysisPythonOper::searchCrashInfo(const QString& sS
 void JiraAnalysisPythonOper::searchIssue(const QString& sIssue)
 {
     PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "searchIssue", "s", sIssue.toStdString().c_str());
-    Py_DECREF(pReturn);
+    FreeAndNilPyObject(pReturn);
 }
 
 /*!
@@ -94,7 +94,7 @@ QString JiraAnalysisPythonOper::downloadStack(const QString& sStackId)
     PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "crashStack", "s", sStackId.toStdString().c_str());
     PyArg_Parse(pReturn, "s", &pResult);
     QString sResult(pResult);
-    Py_DECREF(pReturn);
+    FreeAndNilPyObject(pReturn);
     return sResult;
 }
 
@@ -108,7 +108,7 @@ QString JiraAnalysisPythonOper::analysisIssue()
     PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "analysisIssue", nullptr, nullptr);
     PyArg_Parse(pReturn, "s", &pResult);
     QString sResult(pResult);
-    Py_DECREF(pReturn);
+    FreeAndNilPyObject(pReturn);
     return sResult;
 }
 
@@ -132,9 +132,9 @@ void JiraAnalysisPythonOper::updateIssue(CrashUpdateInfo *pUpdateInfo)
     PyDict_SetItemString(pDict, "crashCount", Py_BuildValue("s", pUpdateInfo->sCrashCount.toStdString().c_str()));
     PyTuple_SetItem(pArgs, 0, pDict); 
     PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "updateIssue", "O", pArgs);
-    Py_DECREF(pReturn);
-    Py_DECREF(pDict);
-    Py_DECREF(pArgs);
+    FreeAndNilPyObject(pReturn);
+    FreeAndNilPyObject(pDict);
+    FreeAndNilPyObject(pArgs);
 }
 
 /*!
@@ -146,7 +146,7 @@ void JiraAnalysisPythonOper::beforeAnalysis()
     PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "beforeAnalysis", "ss", 
         qApp->applicationDirPath().toStdString().c_str(), 
         m_pLoginInfo->sProductCode.toStdString().c_str());
-    Py_DECREF(pReturn);
+    FreeAndNilPyObject(pReturn);
 }
 
 /*!
@@ -156,7 +156,7 @@ void JiraAnalysisPythonOper::beforeAnalysis()
 void JiraAnalysisPythonOper::afterAnalysis()
 {
     PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "afterAnalysis", nullptr);
-    Py_DECREF(pReturn);
+    FreeAndNilPyObject(pReturn);
 }
 
 /*!
@@ -170,6 +170,6 @@ QString JiraAnalysisPythonOper::productVersion()
     PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "productVersion", nullptr);
     PyArg_Parse(pReturn, "s", &pFile);
     QString sResult(pFile);
-    Py_DECREF(pReturn);
+    FreeAndNilPyObject(pReturn);
     return sResult;
 }

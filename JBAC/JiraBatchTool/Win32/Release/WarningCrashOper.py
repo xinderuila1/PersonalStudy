@@ -35,7 +35,10 @@ class WarningCrashOper():
     与GEH交互/自动发邮件
     '''
     
+    __strartCrashday = "2017-01-01"
     __unAnalysisCrashUrl = "http://crash.glodon.com/api/signature/0/%s/crashes?from=%s&to=%s&source=1&s=2000&ver_id=%s&m_ver=%s&search_key=&description=0&bits=0&autotest=0"
+    __allVersionInfoUrl = "http://crash.glodon.com/api/dau?source=1&product=%s&version=%s&startDate=%s&endDate=%s&sub_product=all"
+    __crashVersionInfoUrl = "http://crash.glodon.com/api/crash/daily?outer=1&product=%s&version=%s&start=%s&end=%s&sub_product=all"
     
     #登录GEH
     def initialise(self, username, password):
@@ -80,6 +83,28 @@ class WarningCrashOper():
         crashJson = json.dumps(jsonResult, ensure_ascii=False, indent=4)
         return crashJson 
     
+    #版本基本情况
+    def versionBasicInfo(self, productCode, version, beginDay):
+        startToday = datetime.date.today()
+        endToday = datetime.date.today()
+        if beginDay == "":
+            startToday = self.__strartCrashday
+        searchDay = self.__allVersionInfoUrl % (productCode, version, startToday, endToday)
+        jsonResult = json.loads(urllib2.urlopen(searchDay).read(), 'UTF-8')
+        crashJson = json.dumps(jsonResult, ensure_ascii=False, indent=4)
+        return crashJson         
+        
+    #版本崩溃情况
+    def versionCrashInfo(self, productCode, version, beginDay): 
+        startToday = datetime.date.today()
+        endToday = datetime.date.today()
+        if beginDay == "":
+            startToday = self.__strartCrashday
+        searchDay = self.__crashVersionInfoUrl % (productCode, version, startToday, endToday)
+        jsonResult = json.loads(urllib2.urlopen(searchDay).read(), 'UTF-8')
+        crashJson = json.dumps(jsonResult, ensure_ascii=False, indent=4)
+        return crashJson           
+        
     #发送邮件
     def sendEmailToTesters(self, htmlFile, headers):
         fileObject = open(htmlFile, 'r')
@@ -101,6 +126,14 @@ class WarningCrashOper():
         
         smtpObj = smtplib.SMTP(mail_host)
         smtpObj.sendmail(fromAdd, toAdd, message.as_string())
+    
+#///////////////////////////////////////////////
+#ooo = WarningCrashOper()
+#ooo.initialise("sunjj", "52zhaodan!")
+#ooo.versionBasicInfo("gtj2017", "1.0.9.0", "")
+#print "hello"
+#///////////////////////////////////////////////
+
         
 
     

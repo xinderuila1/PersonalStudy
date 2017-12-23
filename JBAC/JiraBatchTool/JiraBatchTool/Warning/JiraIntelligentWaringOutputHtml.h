@@ -18,6 +18,7 @@ class JiraIntelligentWaringOutputHtml
 public:
     void setoutputpath(const QString& sFilePath);
     void setproductInfo(const QString& sProductInfo);
+    void setproductRate(JiraCrashRate* pTotalHealthyInfo, JiraCrashRate* pTodayHealthyInfo);
     void outputHtml(JiraWarningCrashContainer* pAllUser, JiraWarningCrashContainer*  pNewUser);
 
 private:
@@ -31,12 +32,20 @@ private:
     void addTableHead_NewUser(QFile* pFile);
     void addTableContent_NewUser(QFile* pFile);
     void addTableEnd_NewUser(QFile* pFile);
+
+    void addTableHead_ProductInfo(QFile* pFile);
+    void addTableContent_ProductInfo(QFile* pFile);
+    void addTableEnd_ProductInfo(QFile* pFile);
+
 private:
     QString m_sFilePath;
     QString m_sProductInfo;
 
     JiraWarningCrashContainer* m_pAllUser;
     JiraWarningCrashContainer* m_pNewUser;
+
+    JiraCrashRate* m_pTotalHealthyInfo;
+    JiraCrashRate* m_pTodayHealthyInfo;
 };
 
 #endif

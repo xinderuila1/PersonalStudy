@@ -243,10 +243,14 @@ void JiraIntelligentWaringOper::sendEmailToTesters()
         std::sort(oNewUserCrash.begin(), oNewUserCrash.end(), compareHighLevel);
         std::sort(oAllUserCrash.begin(), oAllUserCrash.end(), compareHighLevel);
         
+        JiraCrashRate oTotalRate = todayCrashRateInfo();
+        JiraCrashRate oTodayRate = totalCrashRateInfo();
+
         QString sHtmlPath = htmlFilePath();
         JiraIntelligentWaringOutputHtml oOutputHtml;
         oOutputHtml.setoutputpath(sHtmlPath);
         oOutputHtml.setproductInfo(m_pProductInfo->productInfo());
+        oOutputHtml.setproductRate(&oTotalRate, &oTodayRate);
         oOutputHtml.outputHtml(&oAllUserCrash, &oNewUserCrash);
 
         m_pIntelligentWaringPython->sendEmailToTesters(sHtmlPath, m_pProductInfo->productInfo());
@@ -312,5 +316,59 @@ void JiraIntelligentWaringOper::logingGehPlatForm()
     oLoginInfo.sUserName = oGehInfo->sUserName;
     oLoginInfo.sPassword = oGehInfo->sPassword;
     m_pIntelligentWaringPython->LoginPlatform(&oLoginInfo);
+}
+
+/*!
+*@brief        今天崩溃数据统计 
+*@author       sunjj 2017年12月23日
+*@return       JiraCrashRate
+*/
+JiraCrashRate JiraIntelligentWaringOper::todayCrashRateInfo()
+{
+    return calcCrashRateInfo(true);
+}
+
+/*!
+*@brief        整体崩溃数据统计 
+*@author       sunjj 2017年12月23日
+*@return       JiraCrashRate
+*/
+JiraCrashRate JiraIntelligentWaringOper::totalCrashRateInfo()
+{
+    return calcCrashRateInfo(false);
+}
+
+/*!
+*@brief        计算版本健康状况 
+*@author       sunjj 2017年12月23日
+*@param[in]    bool bToday
+*@return       JiraCrashRate
+*/
+JiraCrashRate JiraIntelligentWaringOper::calcCrashRateInfo(bool bToday)
+{
+    JiraCrashRate oCrashRate;
+    QString sBasicInfo = m_pIntelligentWaringPython->versionBasicInfo(m_pProductInfo, bToday);
+    QJsonDocument oJsonDocument_total = QJsonDocument::fromJson(sBasicInfo.toUtf8());
+    QJsonObject oAggregationsObj_total = oJsonDocument_total.object().value(strAggregations).toObject();
+
+    QJsonObject oUserObj_total = oAggregationsObj_total.value(strUsers).toObject();
+    oCrashRate.nUserCount = oUserObj_total.value(strValue).toVariant().toInt();
+    QJsonObject oHitsObj_total = oJsonDocument_total.object().value(strHits).toObject();
+    oCrashRate.nStartCount = oHitsObj_total.value(strTotal).toVariant().toInt();
+
+    QString sCrashInfo = m_pIntelligentWaringPython->versionCrashInfo(m_pProductInfo, bToday);
+    QJsonDocument oJsonDocument_crash = QJsonDocument::fromJson(sCrashInfo.toUtf8());
+    QJsonObject oAggregationsObj_crash = oJsonDocument_crash.object().value(strAggregations).toObject();
+
+    QJsonObject oUserObj_crash = oAggregationsObj_crash.value(strUsers).toObject();
+    oCrashRate.nCrashUserCount = oUserObj_crash.value(strValue).toVariant().toInt();
+    QJsonObject oHitsObj_crash = oJsonDocument_crash.object().value(strHits).toObject();
+    oCrashRate.nCrashCount = oHitsObj_crash.value(strTotal).toVariant().toInt();
+
+    oCrashRate.sCrashRate = (oCrashRate.nStartCount == 0)?  "0" : 
+        (QString::number(((double)oCrashRate.nCrashCount / (double)oCrashRate.nStartCount) * 100, 'f', 2) + "%");
+    oCrashRate.sUserRate = (oCrashRate.nUserCount == 0)? "0" : 
+        (QString::number(((double)oCrashRate.nCrashUserCount / (double)oCrashRate.nUserCount) * 100, 'f', 2) + "%");
+    return oCrashRate;
 }
 

@@ -14,6 +14,8 @@
 #include <vector>
 #include <QString>
 
+#define FreeAndNilPyObject(pPyObject) {if (pPyObject){Py_DECREF(pPyObject); pPyObject = nullptr;}}
+
 //模块信息
 struct JiraModuleInfo
 {
@@ -255,6 +257,16 @@ struct DefaultUser
     QString sUser;  //用户名
     QString sDomain; //域名
 };
+
+struct JiraCrashRate
+{
+    int nStartCount;    //启动次数
+    int nCrashCount;    //崩溃次数
+    int nUserCount;     //用户总数
+    int nCrashUserCount; //崩溃用户数
+    QString sCrashRate;  //崩溃比率
+    QString sUserRate;   //影响用户率
+};
 //////////////////////////////////////////////////////////////////////////
 static const QString strModule = "module";
 static const QString strFunction = "function";
@@ -287,6 +299,11 @@ static const QString strList = "list";
 static const QString strCrashTime = "crashTime";
 static const QString strDeviceId = "deviceId";
 static const QString strVersionId = "versionId";
+static const QString strAggregations = "aggregations";
+static const QString strUsers = "users";
+static const QString strValue = "value";
+static const QString strHits = "hits";
+static const QString strTotal = "total";
 
 //配置文件专用
 static const QString strProductInfo = "ProductInfo";
