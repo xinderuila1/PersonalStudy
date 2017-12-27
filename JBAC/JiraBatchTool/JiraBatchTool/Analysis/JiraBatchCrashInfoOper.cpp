@@ -19,6 +19,8 @@ JiraBatchCrashInfoOper::JiraBatchCrashInfoOper()
     m_pAnalysisModuleOper = new JiraAnalysisModuleOper(m_pAnalysisDumpListOper);
     m_pAnalysisBelongOper = new JiraAnalysisBelongOper(m_pAnalysisDumpListOper);
     m_pAnalysisVersionOper = new JiraAnalysisVersionOper;
+
+    logingGehPlatForm();
 }
 
 /*!
@@ -62,15 +64,7 @@ void JiraBatchCrashInfoOper::parseCrashInfo(const QString& sSql)
 */
 void JiraBatchCrashInfoOper::beforeBatch()
 {
-    std::shared_ptr<ProductInfo> oProductInfo = JiraUserCustomSetting::instance()->productInfo();
-    std::shared_ptr<JiraInfo> oJiraInfo = JiraUserCustomSetting::instance()->jiraInfo();
-
-    LoginInfo oLoginInfo;
-    oLoginInfo.sJiarUrl = oJiraInfo->sJiraUrl;
-    oLoginInfo.sUserName = oJiraInfo->sUserName;
-    oLoginInfo.sPassword = oJiraInfo->sPassword;
-    oLoginInfo.sProductCode = oProductInfo->sProductKey;
-    m_pAnalysisPythonOper->LoginPlatform(&oLoginInfo);
+    //todo
 }
 
 /*!
@@ -151,4 +145,21 @@ CrashUpdateInfo* JiraBatchCrashInfoOper::parseCrashBelong()
         return pFromDllStack;
     }
     return pFromScript;
+}
+
+/*!
+*@brief        登录异常捕获平台 
+*@author       sunjj 2017年12月27日
+*/
+void JiraBatchCrashInfoOper::logingGehPlatForm()
+{
+    std::shared_ptr<ProductInfo> oProductInfo = JiraUserCustomSetting::instance()->productInfo();
+    std::shared_ptr<JiraInfo> oJiraInfo = JiraUserCustomSetting::instance()->jiraInfo();
+
+    LoginInfo oLoginInfo;
+    oLoginInfo.sJiarUrl = oJiraInfo->sJiraUrl;
+    oLoginInfo.sUserName = oJiraInfo->sUserName;
+    oLoginInfo.sPassword = oJiraInfo->sPassword;
+    oLoginInfo.sProductCode = oProductInfo->sProductKey;
+    m_pAnalysisPythonOper->LoginPlatform(&oLoginInfo);
 }

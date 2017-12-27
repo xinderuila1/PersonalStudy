@@ -34,6 +34,7 @@ private:
     void searchCrashInfo(const QString& sSql);
     void analysisCrashInfo();
     CrashUpdateInfo* parseCrashBelong();
+    void logingGehPlatForm();
 
 private:
     JiraCrashKeyContainer *m_pCrashKeyMap;
