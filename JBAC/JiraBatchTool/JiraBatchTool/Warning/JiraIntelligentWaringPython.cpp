@@ -36,10 +36,14 @@ QString JiraIntelligentWaringPython::downloadUnAnalysisCrash(JiraProductInfo* pP
     PyObject *pReturn = PyObject_CallMethod(m_pWarningOper, "downloadUnAnalysisCrash", "ss", 
         pProductInfo->sProductKey.toStdString().c_str(), 
         pProductInfo->sVersionId.toStdString().c_str());
-    PyArg_Parse(pReturn, "s", &pResult);
-    QString sResult(pResult);
-    FreeAndNilPyObject(pReturn);
-    return sResult;
+    if (pReturn)
+    {
+        PyArg_Parse(pReturn, "s", &pResult);
+        QString sResult(pResult);
+        FreeAndNilPyObject(pReturn);
+        return sResult;
+    }
+    return "";
 }
 
 /*!
