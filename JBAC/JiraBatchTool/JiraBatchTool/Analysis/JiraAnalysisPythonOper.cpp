@@ -58,6 +58,9 @@ void JiraAnalysisPythonOper::LoginPlatform(LoginInfo* pLogInfo)
 JiraCrashKeyContainer* JiraAnalysisPythonOper::searchCrashInfo(const QString& sSqlStr)
 {
     PyObject *pReturn = PyObject_CallMethod(m_pAnalysisOper, "searchCrashInfo", "s", sSqlStr.toStdString().c_str());
+    if (!pReturn)
+        return m_pSearchResult;
+
     PyObject *pKey, *pValue;
     Py_ssize_t pos = 0;
     m_pSearchResult->clear();
